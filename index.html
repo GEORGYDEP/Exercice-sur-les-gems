@@ -1,36 +1,1521 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pythagora Quest</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            background-color: #030712;
-            color: #f8fafc;
-            overflow-x: hidden;
-        }
-        .fira-code {
-            font-family: 'Fira Code', monospace;
-        }
-    </style>
-<script type="importmap">
-{
-  "imports": {
-    "@google/genai": "https://esm.sh/@google/genai@^1.40.0",
-    "react": "https://esm.sh/react@^19.2.4",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
-  }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Lab · Formation IA pour Enseignants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0a0a0f;
+  --bg-card: rgba(255,255,255,0.03);
+  --bg-card-hover: rgba(255,255,255,0.06);
+  --glass: rgba(255,255,255,0.05);
+  --glass-border: rgba(255,255,255,0.08);
+  --text-primary: #f0ece4;
+  --text-secondary: rgba(240,236,228,0.55);
+  --text-muted: rgba(240,236,228,0.3);
+  --accent-1: #6366f1;
+  --accent-2: #8b5cf6;
+  --accent-3: #a78bfa;
+  --accent-warm: #f59e0b;
+  --accent-green: #10b981;
+  --accent-rose: #f43f5e;
+  --accent-cyan: #06b6d4;
+  --glow-1: rgba(99,102,241,0.15);
+  --glow-2: rgba(139,92,246,0.15);
+  --radius: 20px;
+  --radius-sm: 12px;
+  --radius-xs: 8px;
 }
-</script>
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══ CANVAS BACKGROUND ═══ */
+#bgCanvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.gradient-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.4;
+  z-index: 0;
+  pointer-events: none;
+  animation: orbFloat 20s ease-in-out infinite;
+}
+.orb-1 { width:600px;height:600px;background:var(--accent-1);top:-200px;left:-100px;animation-delay:0s; }
+.orb-2 { width:500px;height:500px;background:var(--accent-2);bottom:-150px;right:-100px;animation-delay:-7s; }
+.orb-3 { width:400px;height:400px;background:var(--accent-cyan);top:40%;left:50%;animation-delay:-14s;opacity:0.2; }
+
+@keyframes orbFloat {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(30px,-40px) scale(1.05); }
+  66% { transform: translate(-20px,30px) scale(0.95); }
+}
+
+/* ═══ LAYOUT ═══ */
+.app-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+/* ═══ HEADER / HERO ═══ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 100px;
+  padding: 8px 20px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  backdrop-filter: blur(20px);
+  animation: fadeInUp 0.8s ease both;
+}
+
+.hero-badge .dot {
+  width: 8px; height: 8px;
+  background: var(--accent-green);
+  border-radius: 50%;
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+  0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
+  50% { opacity:0.8; box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.8s ease 0.1s both;
+}
+
+.hero h1 .gradient-text {
+  background: linear-gradient(135deg, var(--accent-3), var(--accent-cyan), var(--accent-warm));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--text-secondary);
+  max-width: 600px;
+  line-height: 1.6;
+  font-weight: 300;
+  margin-bottom: 3rem;
+  animation: fadeInUp 0.8s ease 0.2s both;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeInUp 0.8s ease 0.3s both;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 16px 32px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  box-shadow: 0 4px 30px var(--glow-1);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 40px var(--glow-2);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--glass);
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+  border-radius: 100px;
+  padding: 16px 32px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  backdrop-filter: blur(20px);
+}
+.btn-secondary:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(255,255,255,0.15);
+  transform: translateY(-2px);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  animation: fadeInUp 0.8s ease 0.5s both;
+}
+
+.scroll-indicator .line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--accent-1), transparent);
+  animation: scrollLine 2s ease infinite;
+}
+
+@keyframes scrollLine {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ═══ STATS BAR ═══ */
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  padding: 3rem 2rem;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  text-align: center;
+}
+.stat-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2.5rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--accent-3), var(--accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ═══ PROGRESS SECTION ═══ */
+.progress-section {
+  max-width: 900px;
+  margin: 0 auto 3rem;
+  padding: 0 2rem;
+}
+
+.progress-container {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  backdrop-filter: blur(20px);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.progress-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.progress-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--accent-3);
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 100px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-cyan));
+  border-radius: 100px;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+  width: 0%;
+}
+
+.progress-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.4s ease;
+  background: var(--bg-deep);
+  position: relative;
+}
+.badge.completed {
+  border-color: var(--accent-green);
+  background: rgba(16,185,129,0.15);
+  animation: badgePop 0.5s ease;
+}
+
+@keyframes badgePop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* ═══ SECTIONS ═══ */
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--accent-1);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.section-desc {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+/* ═══ MISSION CARDS ═══ */
+.missions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+.mission-card {
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+  cursor: pointer;
+  position: relative;
+}
+.mission-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  padding: 1px;
+  background: linear-gradient(135deg, transparent 40%, var(--card-accent, var(--accent-1)) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.mission-card:hover::before { opacity: 1; }
+.mission-card:hover {
+  transform: translateY(-4px);
+  background: var(--bg-card-hover);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.mission-card.completed {
+  border-color: rgba(16,185,129,0.2);
+}
+.mission-card.completed .mission-check {
+  background: var(--accent-green);
+  color: white;
+}
+
+.card-top {
+  padding: 1.5rem 1.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.mission-icon {
+  width: 52px; height: 52px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: var(--card-accent-bg, var(--glow-1));
+  border: 1px solid var(--card-accent-border, rgba(99,102,241,0.2));
+}
+
+.mission-check {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+  background: transparent;
+}
+
+.card-body {
+  padding: 1.25rem 1.5rem;
+}
+
+.mission-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
+
+.mission-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.mission-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.mission-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.tag {
+  font-size: 0.7rem;
+  padding: 4px 10px;
+  border-radius: 100px;
+  background: rgba(255,255,255,0.05);
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.tag.easy { color: var(--accent-green); background: rgba(16,185,129,0.1); }
+.tag.medium { color: var(--accent-warm); background: rgba(245,158,11,0.1); }
+
+.card-footer {
+  padding: 0 1.5rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.time-estimate {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.start-btn {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+}
+.start-btn:hover {
+  color: white;
+  gap: 10px;
+}
+
+/* ═══ MODAL ═══ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  padding: 1rem;
+}
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  background: #13131a;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  max-width: 720px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.modal-overlay.active .modal {
+  transform: translateY(0) scale(1);
+}
+
+.modal::-webkit-scrollbar { width: 6px; }
+.modal::-webkit-scrollbar-track { background: transparent; }
+.modal::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+.modal-header {
+  padding: 2rem 2rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: sticky;
+  top: 0;
+  background: linear-gradient(to bottom, #13131a 80%, transparent);
+  z-index: 2;
+  padding-bottom: 1rem;
+}
+
+.modal-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.modal-icon {
+  width: 48px; height: 48px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.modal-close {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: var(--glass);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.modal-close:hover {
+  background: var(--bg-card-hover);
+  color: white;
+}
+
+.modal-content {
+  padding: 1.5rem 2rem 2rem;
+}
+
+.modal-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.modal-section {
+  margin-bottom: 1.5rem;
+}
+
+.modal-section-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-text {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.prompt-box {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  position: relative;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xs);
+  padding: 6px 14px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.copy-btn:hover {
+  background: var(--accent-1);
+  border-color: var(--accent-1);
+  color: white;
+}
+.copy-btn.copied {
+  background: var(--accent-green);
+  border-color: var(--accent-green);
+  color: white;
+}
+
+.tip-box {
+  background: rgba(245,158,11,0.08);
+  border: 1px solid rgba(245,158,11,0.15);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  font-size: 0.9rem;
+  color: rgba(245,158,11,0.9);
+  line-height: 1.6;
+}
+
+.tip-box strong {
+  color: var(--accent-warm);
+}
+
+.expected-box {
+  background: rgba(16,185,129,0.08);
+  border: 1px solid rgba(16,185,129,0.15);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  font-size: 0.9rem;
+  color: rgba(16,185,129,0.9);
+  line-height: 1.6;
+}
+
+.variation-box {
+  background: rgba(99,102,241,0.08);
+  border: 1px solid rgba(99,102,241,0.15);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  font-size: 0.9rem;
+  color: rgba(167,139,250,0.9);
+  line-height: 1.6;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  padding-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-complete {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--accent-green), #059669);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 14px 28px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-complete:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(16,185,129,0.3); }
+.btn-complete:disabled { opacity: 0.5; cursor: default; transform: none; box-shadow: none; }
+
+.btn-gemini {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #4285f4, #34a853);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 14px 28px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.btn-gemini:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(66,133,244,0.3); }
+
+/* ═══ TIPS SECTION ═══ */
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.tip-card {
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+.tip-card:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-2px);
+}
+
+.tip-card-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.tip-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.tip-card-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ═══ CELEBRATION ═══ */
+.celebration-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(20px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s ease;
+}
+.celebration-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.celebration-content {
+  text-align: center;
+  animation: celebPop 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes celebPop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.celebration-emoji {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+}
+
+.celebration-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--accent-warm), var(--accent-rose), var(--accent-3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.celebration-text {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+/* ═══ FOOTER ═══ */
+.footer {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--glass-border);
+  margin-top: 4rem;
+}
+.footer a { color: var(--accent-3); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+
+/* ═══ CONFETTI ═══ */
+.confetti-piece {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  z-index: 2001;
+  pointer-events: none;
+}
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 768px) {
+  .missions-grid { grid-template-columns: 1fr; }
+  .stats-bar { gap: 2rem; }
+  .modal { margin: 0.5rem; }
+  .modal-content { padding: 1rem 1.5rem 1.5rem; }
+  .hero-cta { flex-direction: column; align-items: center; }
+}
+
+/* ═══ PARTICLE FIELD ═══ */
+.particle {
+  position: fixed;
+  width: 2px;
+  height: 2px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+</style>
 </head>
 <body>
-    <div id="root"></div>
+
+<!-- Background Orbs -->
+<div class="gradient-orb orb-1"></div>
+<div class="gradient-orb orb-2"></div>
+<div class="gradient-orb orb-3"></div>
+
+<div class="app-wrapper">
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero" id="hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Formation en cours · Institut Saint-Luc Frameries
+    </div>
+    <h1>
+      <span class="gradient-text">AI Lab</span><br>
+      Formation IA
+    </h1>
+    <p class="hero-subtitle">
+      12 missions interactives pour découvrir le potentiel de l'intelligence artificielle dans votre pratique pédagogique quotidienne.
+    </p>
+    <div class="hero-cta">
+      <a href="#missions" class="btn-primary">
+        🚀 Commencer l'aventure
+      </a>
+      <a href="https://gemini.google.com" target="_blank" class="btn-secondary">
+        ✦ Ouvrir Gemini
+      </a>
+    </div>
+    <div class="scroll-indicator">
+      <span>Découvrir</span>
+      <div class="line"></div>
+    </div>
+  </section>
+
+  <!-- ═══ STATS ═══ -->
+  <div class="stats-bar">
+    <div class="stat-item fade-in">
+      <div class="stat-number">12</div>
+      <div class="stat-label">Missions</div>
+    </div>
+    <div class="stat-item fade-in">
+      <div class="stat-number" id="completedCount">0</div>
+      <div class="stat-label">Complétées</div>
+    </div>
+    <div class="stat-item fade-in">
+      <div class="stat-number">~45</div>
+      <div class="stat-label">Minutes</div>
+    </div>
+    <div class="stat-item fade-in">
+      <div class="stat-number">∞</div>
+      <div class="stat-label">Possibilités</div>
+    </div>
+  </div>
+
+  <!-- ═══ PROGRESS ═══ -->
+  <div class="progress-section fade-in">
+    <div class="progress-container">
+      <div class="progress-header">
+        <span class="progress-title">Votre progression</span>
+        <span class="progress-count"><span id="progressNum">0</span>/12</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressBar"></div>
+      </div>
+      <div class="progress-badges" id="progressBadges"></div>
+    </div>
+  </div>
+
+  <!-- ═══ MISSIONS ═══ -->
+  <section class="section" id="missions">
+    <div class="section-header fade-in">
+      <div class="section-label">// Missions</div>
+      <h2 class="section-title">Explorez les possibilités</h2>
+      <p class="section-desc">
+        Chaque mission vous fait découvrir une utilisation concrète de l'IA. Copiez le prompt, testez-le dans Gemini, et marquez la mission comme terminée.
+      </p>
+    </div>
+    <div class="missions-grid" id="missionsGrid"></div>
+  </section>
+
+  <!-- ═══ TIPS ═══ -->
+  <section class="section" id="tips">
+    <div class="section-header fade-in">
+      <div class="section-label">// Pro Tips</div>
+      <h2 class="section-title">Les clés du succès</h2>
+      <p class="section-desc">
+        Quelques principes essentiels pour tirer le meilleur de l'IA générative.
+      </p>
+    </div>
+    <div class="tips-grid">
+      <div class="tip-card fade-in">
+        <div class="tip-card-icon">🎯</div>
+        <div class="tip-card-title">Soyez précis</div>
+        <p class="tip-card-text">Plus votre demande est détaillée et contextualisée, meilleure sera la réponse. Précisez le niveau, la matière, le format souhaité.</p>
+      </div>
+      <div class="tip-card fade-in">
+        <div class="tip-card-icon">🔄</div>
+        <div class="tip-card-title">Itérez</div>
+        <p class="tip-card-text">La première réponse est un point de départ. Affinez avec des demandes complémentaires : « Rends-le plus simple », « Ajoute un exemple ».</p>
+      </div>
+      <div class="tip-card fade-in">
+        <div class="tip-card-icon">🎭</div>
+        <div class="tip-card-title">Donnez un rôle</div>
+        <p class="tip-card-text">« Tu es un professeur de maths expérimenté » oriente l'IA vers un registre et une expertise adaptés.</p>
+      </div>
+      <div class="tip-card fade-in">
+        <div class="tip-card-icon">📐</div>
+        <div class="tip-card-title">Structurez</div>
+        <p class="tip-card-text">Demandez un format précis : tableau, liste à puces, étapes numérotées. L'IA suit les consignes de format avec fiabilité.</p>
+      </div>
+      <div class="tip-card fade-in">
+        <div class="tip-card-icon">🧪</div>
+        <div class="tip-card-title">Expérimentez</div>
+        <p class="tip-card-text">Testez différentes formulations pour la même demande. Vous découvrirez que certains mots-clés donnent des résultats surprenants.</p>
+      </div>
+      <div class="tip-card fade-in">
+        <div class="tip-card-icon">⚡</div>
+        <div class="tip-card-title">Vérifiez</div>
+        <p class="tip-card-text">L'IA peut inventer des informations. Vérifiez toujours les faits, dates et chiffres avant d'utiliser le contenu en classe.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer">
+    <p>AI Lab · Formation IA pour Enseignants · Institut Saint-Luc de Frameries<br>
+    Créé avec ❤️ pour la journée de formation · <a href="https://gemini.google.com" target="_blank">Accéder à Gemini</a></p>
+  </footer>
+
+</div>
+
+<!-- ═══ MODAL ═══ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal"></div>
+</div>
+
+<!-- ═══ CELEBRATION ═══ -->
+<div class="celebration-overlay" id="celebrationOverlay">
+  <div class="celebration-content">
+    <div class="celebration-emoji">🎓🎉🏆</div>
+    <h2 class="celebration-title">Félicitations !</h2>
+    <p class="celebration-text">Vous avez complété toutes les missions.<br>Vous êtes prêt(e) à intégrer l'IA dans votre pratique !</p>
+    <button class="btn-primary" onclick="closeCelebration()">✦ Merci !</button>
+  </div>
+</div>
+
+<script>
+// ═══ MISSIONS DATA ═══
+const missions = [
+  {
+    id: 1,
+    icon: "📝",
+    title: "Le Créateur de QCM",
+    desc: "Générez un questionnaire à choix multiples prêt à l'emploi en quelques secondes pour n'importe quelle matière.",
+    tags: ["Facile", "Évaluation"],
+    tagClasses: ["easy", ""],
+    time: "3 min",
+    accentBg: "rgba(16,185,129,0.1)",
+    accentBorder: "rgba(16,185,129,0.2)",
+    accent: "#10b981",
+    objective: "Découvrir comment l'IA peut créer des évaluations structurées instantanément.",
+    prompt: `Tu es un enseignant expérimenté. Crée un QCM de 5 questions sur le thème de la photosynthèse pour des élèves de 3e secondaire.\n\nPour chaque question :\n- Propose 4 choix (A, B, C, D)\n- Indique la bonne réponse\n- Ajoute une courte explication\n\nNiveau de difficulté : intermédiaire.`,
+    tip: "Adaptez le sujet à VOTRE matière ! Remplacez « photosynthèse » par n'importe quel thème de votre cours. Vous pouvez aussi préciser « avec des questions pièges » ou « uniquement des questions de compréhension ».",
+    expected: "Gemini va produire 5 questions formatées avec les réponses et explications. Vous pouvez ensuite demander « Transforme cela en format tableau » ou « Ajoute 5 questions plus difficiles ».",
+    variation: "Essayez : « Crée un QCM de 5 questions sur [votre sujet] mais formule les questions comme des situations de la vie réelle »."
+  },
+  {
+    id: 2,
+    icon: "🎯",
+    title: "Le Différenciateur",
+    desc: "Adaptez automatiquement un même contenu pour différents niveaux d'élèves, de débutant à avancé.",
+    tags: ["Facile", "Différenciation"],
+    tagClasses: ["easy", ""],
+    time: "3 min",
+    accentBg: "rgba(99,102,241,0.1)",
+    accentBorder: "rgba(99,102,241,0.2)",
+    accent: "#6366f1",
+    objective: "Comprendre comment l'IA peut aider à la différenciation pédagogique sans multiplier le travail de préparation.",
+    prompt: `Explique le concept de "l'offre et la demande" en économie de 3 manières différentes :\n\n1. Pour un élève de 3e secondaire qui découvre le sujet (utilise un langage simple et un exemple du quotidien)\n\n2. Pour un élève de 5e secondaire (ajoute du vocabulaire technique)\n\n3. Pour un élève avancé qui prépare un examen (niveau plus analytique avec les mécanismes de marché)`,
+    tip: "C'est l'un des usages les plus puissants de l'IA pour un enseignant ! Un seul prompt et vous obtenez 3 versions adaptées. Remplacez le concept par n'importe quel sujet de votre programme.",
+    expected: "Trois explications du même concept avec une complexité croissante. Observez comment le vocabulaire, les exemples et la profondeur s'adaptent à chaque niveau.",
+    variation: "Ajoutez : « Pour chaque niveau, propose aussi un petit exercice d'application adapté »."
+  },
+  {
+    id: 3,
+    icon: "📊",
+    title: "La Grille d'Évaluation",
+    desc: "Créez une grille d'évaluation critériée professionnelle en un instant, avec niveaux de maîtrise et descripteurs.",
+    tags: ["Facile", "Évaluation"],
+    tagClasses: ["easy", ""],
+    time: "3 min",
+    accentBg: "rgba(244,63,94,0.1)",
+    accentBorder: "rgba(244,63,94,0.2)",
+    accent: "#f43f5e",
+    objective: "Découvrir comment l'IA génère des outils d'évaluation structurés et professionnels.",
+    prompt: `Crée une grille d'évaluation pour une présentation orale d'un élève de 4e secondaire.\n\nLa grille doit contenir :\n- 5 critères d'évaluation\n- 4 niveaux de maîtrise (Insuffisant / En développement / Satisfaisant / Excellent)\n- Un descripteur précis pour chaque case\n- Un barème sur 20 points\n\nPrésente le résultat sous forme de tableau.`,
+    tip: "Les grilles d'évaluation sont longues à créer manuellement. L'IA les génère en quelques secondes. Vous pouvez ensuite affiner : « Rends les descripteurs plus courts » ou « Ajoute un critère sur la créativité ».",
+    expected: "Un tableau complet avec 5 critères × 4 niveaux = 20 descripteurs, plus un barème cohérent. C'est un gain de temps considérable !",
+    variation: "Essayez pour votre propre matière : « Crée une grille d'évaluation pour [type de travail] en [matière] »."
+  },
+  {
+    id: 4,
+    icon: "💡",
+    title: "L'Inspirateur de Cours",
+    desc: "Obtenez des idées d'activités créatives et engageantes pour dynamiser vos séquences de cours.",
+    tags: ["Facile", "Créativité"],
+    tagClasses: ["easy", ""],
+    time: "3 min",
+    accentBg: "rgba(245,158,11,0.1)",
+    accentBorder: "rgba(245,158,11,0.2)",
+    accent: "#f59e0b",
+    objective: "Explorer la capacité de l'IA à proposer des idées pédagogiques innovantes et réalisables.",
+    prompt: `Tu es un conseiller pédagogique créatif. Je suis professeur de français en 4e secondaire et je dois enseigner la rédaction d'un texte argumentatif.\n\nPropose-moi 5 activités originales et motivantes pour introduire ce sujet. Pour chaque activité :\n- Donne un nom accrocheur\n- Décris le déroulement en 3-4 étapes\n- Indique la durée estimée\n- Précise le matériel nécessaire`,
+    tip: "N'hésitez pas à ajouter des contraintes : « sans matériel numérique », « en travail de groupe », « pour une classe peu motivée ». Plus le contexte est riche, plus les suggestions sont pertinentes.",
+    expected: "5 activités détaillées avec des idées que vous n'auriez peut-être pas envisagées. L'IA est un excellent brainstorming partner !",
+    variation: "Changez la matière et le sujet pour votre propre cours. Essayez aussi : « Propose une activité gamifiée pour réviser [sujet] »."
+  },
+  {
+    id: 5,
+    icon: "✉️",
+    title: "L'Assistant Email",
+    desc: "Rédigez des emails professionnels impeccables : parents, collègues, direction, en un clin d'œil.",
+    tags: ["Facile", "Communication"],
+    tagClasses: ["easy", ""],
+    time: "2 min",
+    accentBg: "rgba(6,182,212,0.1)",
+    accentBorder: "rgba(6,182,212,0.2)",
+    accent: "#06b6d4",
+    objective: "Voir comment l'IA aide à la communication professionnelle au quotidien.",
+    prompt: `Rédige un email professionnel et bienveillant à destination des parents d'un élève de 4e secondaire.\n\nContexte : L'élève a un bon potentiel mais manque de régularité dans son travail à domicile. Ses résultats sont en baisse depuis 2 mois.\n\nL'email doit :\n- Rester positif et constructif\n- Mentionner les qualités de l'élève\n- Exprimer les inquiétudes avec diplomatie\n- Proposer une rencontre\n- Faire environ 150 mots`,
+    tip: "L'IA excelle pour trouver le bon ton dans des situations délicates. Vous pouvez demander une version « plus formelle », « plus chaleureuse » ou « plus directe » selon vos besoins.",
+    expected: "Un email bien structuré, au ton professionnel et bienveillant, prêt à être personnalisé avec le nom de l'élève et envoyé.",
+    variation: "Testez avec d'autres contextes : email au directeur pour proposer un projet, message aux collègues pour organiser une sortie, réponse à un parent mécontent."
+  },
+  {
+    id: 6,
+    icon: "🧩",
+    title: "L'Exercice à Trous",
+    desc: "Générez des textes à trous pédagogiques avec corrigé intégré pour n'importe quelle matière.",
+    tags: ["Facile", "Exercices"],
+    tagClasses: ["easy", ""],
+    time: "3 min",
+    accentBg: "rgba(139,92,246,0.1)",
+    accentBorder: "rgba(139,92,246,0.2)",
+    accent: "#8b5cf6",
+    objective: "Découvrir la génération automatique d'exercices classiques mais efficaces.",
+    prompt: `Crée un exercice à trous sur le thème de la conjugaison du passé composé en français.\n\nConsignes :\n- 8 phrases avec un verbe manquant à conjuguer\n- Varier les verbes du 1er, 2e et 3e groupe\n- Inclure des verbes avec l'auxiliaire être ET avoir\n- Les phrases doivent être dans un contexte du quotidien d'un adolescent\n\nDonne ensuite le corrigé complet.`,
+    tip: "Demandez des exercices contextualisés ! « Des phrases sur le thème du sport » ou « en lien avec l'actualité ». Les élèves s'investissent davantage quand le contenu leur parle.",
+    expected: "8 phrases à trous thématiques avec un corrigé séparé. Prêt à être distribué tel quel ou adapté.",
+    variation: "Adaptez à votre matière : exercice à trous en sciences (vocabulaire), en histoire (dates/événements), en langues (grammaire)."
+  },
+  {
+    id: 7,
+    icon: "🎪",
+    title: "Le Brise-Glace",
+    desc: "Créez des activités brise-glace originales pour démarrer un cours ou accueillir une nouvelle classe.",
+    tags: ["Facile", "Animation"],
+    tagClasses: ["easy", ""],
+    time: "2 min",
+    accentBg: "rgba(236,72,153,0.1)",
+    accentBorder: "rgba(236,72,153,0.2)",
+    accent: "#ec4899",
+    objective: "Voir que l'IA est aussi un allié pour la gestion de classe et l'ambiance.",
+    prompt: `Propose 3 activités brise-glace originales pour une classe de 20 élèves de 5e secondaire.\n\nContraintes :\n- Durée : maximum 10 minutes chacune\n- Pas de matériel spécifique nécessaire\n- Adaptées à des adolescents (pas trop enfantin)\n- Au moins une qui fait bouger les élèves\n\nPour chaque activité, donne :\n- Un nom fun\n- Les règles en 4 étapes maximum\n- Pourquoi ça fonctionne (bénéfice pédagogique)`,
+    tip: "Précisez le contexte : « pour une rentrée de septembre », « pour après un examen », « pour un cours du vendredi après-midi ». L'IA adaptera le ton et l'énergie.",
+    expected: "3 activités complètes et réalistes, avec des idées fraîches que vous pourrez tester dès votre prochain cours.",
+    variation: "Demandez : « Propose un brise-glace qui intègre [votre matière] de façon ludique »."
+  },
+  {
+    id: 8,
+    icon: "🔄",
+    title: "Le Reformulateur",
+    desc: "Transformez un texte complexe en version simplifiée ou adaptez le registre de langue à votre public.",
+    tags: ["Facile", "Langue"],
+    tagClasses: ["easy", ""],
+    time: "3 min",
+    accentBg: "rgba(20,184,166,0.1)",
+    accentBorder: "rgba(20,184,166,0.2)",
+    accent: "#14b8a6",
+    objective: "Comprendre la capacité de l'IA à adapter le niveau de langue d'un contenu existant.",
+    prompt: `Voici un texte de niveau universitaire. Reformule-le pour qu'il soit compréhensible par un élève de 3e secondaire, en gardant toutes les informations importantes :\n\n"La photosynthèse est un processus biochimique qui permet aux organismes autotrophes de synthétiser de la matière organique à partir de matière minérale, en utilisant l'énergie lumineuse. Ce mécanisme se déroule principalement dans les chloroplastes, grâce à la chlorophylle qui absorbe les photons."\n\nDans ta reformulation :\n- Utilise un vocabulaire accessible\n- Ajoute une comparaison ou métaphore pour aider à comprendre\n- Garde un ton engageant`,
+    tip: "Cela fonctionne dans les deux sens ! Vous pouvez aussi demander de complexifier un texte simple, ou de le traduire dans un registre différent (formel, humoristique, poétique...).",
+    expected: "Le même contenu, rendu accessible, avec des comparaisons parlantes. Idéal pour créer des supports adaptés aux élèves en difficulté.",
+    variation: "Collez un extrait de votre propre cours et demandez : « Simplifie ce passage pour des élèves en difficulté, en gardant les termes-clés en gras »."
+  },
+  {
+    id: 9,
+    icon: "📋",
+    title: "Le Planificateur",
+    desc: "Générez une séquence de cours structurée avec objectifs, activités et timing pour toute une semaine.",
+    tags: ["Moyen", "Organisation"],
+    tagClasses: ["medium", ""],
+    time: "4 min",
+    accentBg: "rgba(251,146,60,0.1)",
+    accentBorder: "rgba(251,146,60,0.2)",
+    accent: "#fb923c",
+    objective: "Découvrir l'IA comme outil de planification et d'organisation pédagogique.",
+    prompt: `Tu es un enseignant expert en pédagogie active. Planifie une séquence de 3 cours de 50 minutes sur le thème "Les fractions" pour des élèves de 3e secondaire.\n\nPour chaque cours, détaille :\n- L'objectif d'apprentissage (commence par "L'élève sera capable de...")\n- Le déroulement en phases (accroche, apprentissage, pratique, clôture)\n- Le timing de chaque phase\n- Un exercice concret à réaliser\n- Le matériel nécessaire`,
+    tip: "L'IA produit un excellent premier jet de planification. C'est un point de départ à adapter à votre réalité de terrain : rythme de la classe, matériel disponible, prérequis des élèves.",
+    expected: "3 fiches de préparation détaillées avec un fil conducteur cohérent entre les séances. Une base solide qui vous fait gagner un temps précieux.",
+    variation: "Adaptez : « Planifie une séquence de [X] cours sur [sujet] en [matière] pour des élèves de [niveau] ». Ajoutez vos contraintes spécifiques."
+  },
+  {
+    id: 10,
+    icon: "🏆",
+    title: "Le Coach Feedback",
+    desc: "Rédigez des commentaires constructifs et personnalisés pour les bulletins ou les copies d'élèves.",
+    tags: ["Moyen", "Feedback"],
+    tagClasses: ["medium", ""],
+    time: "3 min",
+    accentBg: "rgba(234,179,8,0.1)",
+    accentBorder: "rgba(234,179,8,0.2)",
+    accent: "#eab308",
+    objective: "Voir comment l'IA peut aider à formuler du feedback bienveillant et constructif.",
+    prompt: `Rédige 3 commentaires de bulletin pour des profils d'élèves différents en mathématiques (4e secondaire) :\n\n1. Élève brillant mais qui ne participe pas en classe et ne fait pas ses devoirs\n\n2. Élève qui travaille énormément mais a des résultats moyens (12/20)\n\n3. Élève en grande difficulté mais qui montre de la bonne volonté\n\nChaque commentaire doit :\n- Faire 3-4 phrases\n- Commencer par un point positif\n- Identifier un axe d'amélioration concret\n- Terminer par un encouragement personnalisé`,
+    tip: "Lors de la rédaction des bulletins, l'IA peut vous aider à varier vos formulations et à trouver le mot juste pour chaque situation. Fini les commentaires qui se répètent !",
+    expected: "3 commentaires distincts, bienveillants et constructifs, chacun adapté au profil décrit. Personnalisez avec le prénom et les détails spécifiques.",
+    variation: "Essayez : « Rédige un commentaire pour un élève qui [situation spécifique] en [matière] » pour un cas réel de votre classe."
+  },
+  {
+    id: 11,
+    icon: "🎲",
+    title: "Le Gamificateur",
+    desc: "Transformez n'importe quel contenu de cours en jeu ou activité ludique pour captiver vos élèves.",
+    tags: ["Moyen", "Ludique"],
+    tagClasses: ["medium", ""],
+    time: "4 min",
+    accentBg: "rgba(168,85,247,0.1)",
+    accentBorder: "rgba(168,85,247,0.2)",
+    accent: "#a855f7",
+    objective: "Explorer le potentiel de l'IA pour créer des activités gamifiées à partir de contenu académique.",
+    prompt: `Transforme la révision des temps verbaux en français (présent, imparfait, passé composé, futur simple) en un jeu de plateau pour 4 équipes de 5 élèves.\n\nLe jeu doit contenir :\n- Un nom accrocheur\n- Les règles du jeu (simples et claires)\n- 10 cartes "défi" avec des questions variées\n- 5 cartes "bonus" avec des défis amusants\n- Un système de points\n- Durée : 30 minutes maximum\n\nLe jeu doit être réalisable avec du papier et des crayons uniquement.`,
+    tip: "La gamification est un levier puissant de motivation. L'IA peut imaginer des mécaniques de jeu que vous n'auriez pas envisagées. Testez avec vos propres sujets !",
+    expected: "Un jeu complet avec règles, cartes et système de points, réalisable sans matériel coûteux. Prêt à être testé en classe !",
+    variation: "Essayez d'autres formats : « Crée un escape game sur [sujet] », « Invente un jeu de rôle pédagogique sur [thème] »."
+  },
+  {
+    id: 12,
+    icon: "🔮",
+    title: "Le Gem sur Mesure",
+    desc: "Mission finale : créez votre propre Gem Gemini personnalisé, un assistant IA taillé pour votre matière.",
+    tags: ["Avancé", "Gem"],
+    tagClasses: ["medium", ""],
+    time: "5 min",
+    accentBg: "rgba(99,102,241,0.1)",
+    accentBorder: "rgba(99,102,241,0.2)",
+    accent: "#6366f1",
+    objective: "Apprendre à créer un Gem Gemini personnalisé pour automatiser vos tâches récurrentes.",
+    prompt: `Aide-moi à créer les instructions pour un Gem Gemini personnalisé destiné à un professeur de [VOTRE MATIÈRE] en secondaire.\n\nCe Gem doit :\n- Avoir un nom accrocheur\n- Avoir des instructions claires qui définissent son rôle\n- Toujours répondre en français\n- Adapter son niveau au secondaire belge\n- Proposer des réponses structurées\n\nGénère les instructions complètes que je pourrai copier-coller dans la configuration du Gem.\n\nVoici ce que je veux que ce Gem fasse principalement :\n- Créer des exercices pour mes cours\n- Proposer des idées d'activités\n- M'aider à rédiger des consignes claires`,
+    tip: "Un Gem, c'est comme un assistant personnalisé qui se souvient de vos préférences. Remplacez [VOTRE MATIÈRE] par votre discipline et adaptez les 3 tâches principales à vos besoins réels.",
+    expected: "Des instructions détaillées pour configurer votre Gem, incluant le rôle, le ton, les compétences et les limites. Il suffit de copier-coller dans Gemini > Gems > Créer un Gem.",
+    variation: "Créez des Gems spécialisés : « Un Gem qui corrige les copies », « Un Gem qui génère des exercices de [matière] », « Un Gem assistant de direction »."
+  }
+];
+
+// ═══ STATE ═══
+let completed = JSON.parse(localStorage.getItem('ailab_completed') || '[]');
+
+// ═══ RENDER ═══
+function renderMissions() {
+  const grid = document.getElementById('missionsGrid');
+  grid.innerHTML = missions.map((m, i) => `
+    <div class="mission-card fade-in ${completed.includes(m.id)?'completed':''}" 
+         style="--card-accent:${m.accent};--card-accent-bg:${m.accentBg};--card-accent-border:${m.accentBorder};animation-delay:${i*0.05}s"
+         onclick="openMission(${m.id})">
+      <div class="card-top">
+        <div class="mission-icon" style="background:${m.accentBg};border-color:${m.accentBorder}">
+          ${m.icon}
+        </div>
+        <div class="mission-check">
+          ${completed.includes(m.id) ? '✓' : ''}
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="mission-number">Mission ${String(m.id).padStart(2,'0')}</div>
+        <div class="mission-title">${m.title}</div>
+        <p class="mission-desc">${m.desc}</p>
+        <div class="mission-tags">
+          ${m.tags.map((t,j) => `<span class="tag ${m.tagClasses[j]}">${t}</span>`).join('')}
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="time-estimate">⏱ ${m.time}</span>
+        <button class="start-btn">${completed.includes(m.id)?'Revoir':'Démarrer'} →</button>
+      </div>
+    </div>
+  `).join('');
+  
+  // trigger fade-in
+  setTimeout(() => {
+    document.querySelectorAll('.missions-grid .fade-in').forEach(el => el.classList.add('visible'));
+  }, 100);
+}
+
+function renderProgress() {
+  const count = completed.length;
+  const pct = (count / missions.length) * 100;
+  
+  document.getElementById('progressNum').textContent = count;
+  document.getElementById('completedCount').textContent = count;
+  document.getElementById('progressBar').style.width = pct + '%';
+  
+  const badges = document.getElementById('progressBadges');
+  badges.innerHTML = missions.map(m => 
+    `<div class="badge ${completed.includes(m.id)?'completed':''}" title="Mission ${m.id}: ${m.title}">${m.icon}</div>`
+  ).join('');
+}
+
+// ═══ MODAL ═══
+function openMission(id) {
+  const m = missions.find(x => x.id === id);
+  const modal = document.getElementById('modal');
+  const isCompleted = completed.includes(id);
+  
+  modal.innerHTML = `
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <div class="modal-icon" style="background:${m.accentBg};border:1px solid ${m.accentBorder};border-radius:var(--radius-sm)">
+          ${m.icon}
+        </div>
+        <div>
+          <div class="modal-label">Mission ${String(m.id).padStart(2,'0')}</div>
+          <div class="modal-title">${m.title}</div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-content">
+      <div class="modal-section">
+        <div class="modal-section-title">🎯 Objectif</div>
+        <p class="modal-text">${m.objective}</p>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">📤 Prompt à copier dans Gemini</div>
+        <div class="prompt-box">
+          <button class="copy-btn" onclick="copyPrompt(this, ${m.id})">📋 Copier</button>
+          ${escapeHtml(m.prompt)}
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="tip-box">
+          <strong>💡 Astuce :</strong> ${m.tip}
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="expected-box">
+          <strong>👁️ Ce que vous devriez obtenir :</strong> ${m.expected}
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="variation-box">
+          <strong>🔀 Variante à tester :</strong> ${m.variation}
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <a href="https://gemini.google.com" target="_blank" class="btn-gemini">
+          ✦ Ouvrir Gemini
+        </a>
+        <button class="btn-complete" onclick="toggleComplete(${m.id})" ${isCompleted ? '' : ''}>
+          ${isCompleted ? '✓ Complétée !' : '✓ Marquer comme terminée'}
+        </button>
+      </div>
+    </div>
+  `;
+  
+  document.getElementById('modalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function copyPrompt(btn, id) {
+  const m = missions.find(x => x.id === id);
+  navigator.clipboard.writeText(m.prompt).then(() => {
+    btn.textContent = '✓ Copié !';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '📋 Copier';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+function toggleComplete(id) {
+  if (!completed.includes(id)) {
+    completed.push(id);
+    localStorage.setItem('ailab_completed', JSON.stringify(completed));
+    renderProgress();
+    renderMissions();
+    
+    // update modal button
+    const btn = event.target;
+    btn.textContent = '✓ Complétée !';
+    
+    // Check all done
+    if (completed.length === missions.length) {
+      setTimeout(() => {
+        closeModal();
+        showCelebration();
+      }, 500);
+    }
+  }
+}
+
+// ═══ CELEBRATION ═══
+function showCelebration() {
+  document.getElementById('celebrationOverlay').classList.add('active');
+  launchConfetti();
+}
+
+function closeCelebration() {
+  document.getElementById('celebrationOverlay').classList.remove('active');
+}
+
+function launchConfetti() {
+  const colors = ['#6366f1','#8b5cf6','#f59e0b','#10b981','#f43f5e','#06b6d4','#ec4899'];
+  for (let i = 0; i < 80; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + 'vw';
+    piece.style.top = '-10px';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    piece.style.width = (Math.random() * 8 + 4) + 'px';
+    piece.style.height = (Math.random() * 8 + 4) + 'px';
+    document.body.appendChild(piece);
+    
+    const duration = Math.random() * 2000 + 1500;
+    const xDrift = (Math.random() - 0.5) * 200;
+    
+    piece.animate([
+      { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+      { transform: `translate(${xDrift}px, 100vh) rotate(${Math.random()*720}deg)`, opacity: 0 }
+    ], { duration, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' }).onfinish = () => piece.remove();
+  }
+}
+
+// ═══ PARTICLES ═══
+function createParticles() {
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    p.style.animationDelay = Math.random() * 5 + 's';
+    document.body.appendChild(p);
+    
+    // Gentle float animation
+    const dur = 10000 + Math.random() * 20000;
+    p.animate([
+      { transform: 'translate(0,0)', opacity: 0.1 },
+      { transform: `translate(${(Math.random()-0.5)*100}px, ${(Math.random()-0.5)*100}px)`, opacity: 0.25 },
+      { transform: 'translate(0,0)', opacity: 0.1 }
+    ], { duration: dur, iterations: Infinity, easing: 'ease-in-out' });
+  }
+}
+
+// ═══ SCROLL OBSERVER ═══
+function initScrollObserver() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+  
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+}
+
+// ═══ CLOSE MODAL ON OVERLAY CLICK ═══
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// ═══ CLOSE ON ESCAPE ═══
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ═══ INIT ═══
+renderMissions();
+renderProgress();
+createParticles();
+setTimeout(initScrollObserver, 100);
+</script>
 </body>
 </html>
