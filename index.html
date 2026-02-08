@@ -3,39 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Lab · Formation IA pour Enseignants</title>
+<title>Le Décalogue du Créateur de Gems — Formation IA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg-deep: #0a0a0f;
-  --bg-card: rgba(255,255,255,0.03);
-  --bg-card-hover: rgba(255,255,255,0.06);
-  --glass: rgba(255,255,255,0.05);
-  --glass-border: rgba(255,255,255,0.08);
-  --text-primary: #f0ece4;
-  --text-secondary: rgba(240,236,228,0.55);
-  --text-muted: rgba(240,236,228,0.3);
-  --accent-1: #6366f1;
-  --accent-2: #8b5cf6;
-  --accent-3: #a78bfa;
-  --accent-warm: #f59e0b;
-  --accent-green: #10b981;
-  --accent-rose: #f43f5e;
-  --accent-cyan: #06b6d4;
-  --glow-1: rgba(99,102,241,0.15);
-  --glow-2: rgba(139,92,246,0.15);
-  --radius: 20px;
-  --radius-sm: 12px;
-  --radius-xs: 8px;
+  --bg-deep: #0a0a12;
+  --bg-card: #12121e;
+  --bg-card-hover: #1a1a2e;
+  --surface: #16162a;
+  --border: rgba(255,255,255,0.06);
+  --text-primary: #f0eef6;
+  --text-secondary: #9896a8;
+  --text-muted: #5d5b6e;
+  --accent-gem: #c084fc;
+  --accent-emerald: #34d399;
+  --accent-ruby: #fb7185;
+  --accent-sapphire: #60a5fa;
+  --accent-amber: #fbbf24;
+  --accent-topaz: #f97316;
+  --glow-purple: rgba(192, 132, 252, 0.15);
+  --glow-emerald: rgba(52, 211, 153, 0.15);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   background: var(--bg-deep);
   color: var(--text-primary);
   min-height: 100vh;
@@ -43,42 +42,65 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ═══ CANVAS BACKGROUND ═══ */
-#bgCanvas {
+/* ═══════════════ BACKGROUND ATMOSPHERE ═══════════════ */
+.atmosphere {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: 0;
+  inset: 0;
   pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
 }
 
-.gradient-orb {
+.atmosphere::before {
+  content: '';
+  position: absolute;
+  width: 800px;
+  height: 800px;
+  top: -200px;
+  left: -200px;
+  background: radial-gradient(circle, rgba(192,132,252,0.08) 0%, transparent 70%);
+  animation: drift 20s ease-in-out infinite;
+}
+
+.atmosphere::after {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  bottom: -100px;
+  right: -100px;
+  background: radial-gradient(circle, rgba(52,211,153,0.06) 0%, transparent 70%);
+  animation: drift 25s ease-in-out infinite reverse;
+}
+
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(60px, -40px) scale(1.1); }
+  66% { transform: translate(-30px, 50px) scale(0.95); }
+}
+
+/* Noise texture overlay */
+.noise {
   position: fixed;
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.4;
-  z-index: 0;
+  inset: 0;
   pointer-events: none;
-  animation: orbFloat 20s ease-in-out infinite;
-}
-.orb-1 { width:600px;height:600px;background:var(--accent-1);top:-200px;left:-100px;animation-delay:0s; }
-.orb-2 { width:500px;height:500px;background:var(--accent-2);bottom:-150px;right:-100px;animation-delay:-7s; }
-.orb-3 { width:400px;height:400px;background:var(--accent-cyan);top:40%;left:50%;animation-delay:-14s;opacity:0.2; }
-
-@keyframes orbFloat {
-  0%,100% { transform: translate(0,0) scale(1); }
-  33% { transform: translate(30px,-40px) scale(1.05); }
-  66% { transform: translate(-20px,30px) scale(0.95); }
-}
-
-/* ═══ LAYOUT ═══ */
-.app-wrapper {
-  position: relative;
   z-index: 1;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px;
 }
 
-/* ═══ HEADER / HERO ═══ */
+/* ═══════════════ SCROLLBAR ═══════════════ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-gem); }
+
+/* ═══════════════ HERO SECTION ═══════════════ */
 .hero {
+  position: relative;
+  z-index: 2;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -86,115 +108,114 @@ body {
   justify-content: center;
   text-align: center;
   padding: 2rem;
-  position: relative;
 }
 
 .hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: var(--glass);
-  border: 1px solid var(--glass-border);
-  border-radius: 100px;
   padding: 8px 20px;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+  background: rgba(192,132,252,0.08);
+  border: 1px solid rgba(192,132,252,0.2);
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-gem);
   margin-bottom: 2rem;
-  backdrop-filter: blur(20px);
-  animation: fadeInUp 0.8s ease both;
+  animation: fadeInDown 0.8s ease-out 0.2s both;
 }
 
 .hero-badge .dot {
-  width: 8px; height: 8px;
-  background: var(--accent-green);
+  width: 6px;
+  height: 6px;
+  background: var(--accent-emerald);
   border-radius: 50%;
-  animation: pulse 2s ease infinite;
+  animation: pulse-dot 2s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
-  50% { opacity:0.8; box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.7); }
 }
 
 .hero h1 {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(3rem, 8vw, 7rem);
+  font-size: clamp(2.5rem, 6vw, 5rem);
   font-weight: 900;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  margin-bottom: 1.5rem;
-  animation: fadeInUp 0.8s ease 0.1s both;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  animation: fadeInDown 0.8s ease-out 0.4s both;
 }
 
-.hero h1 .gradient-text {
-  background: linear-gradient(135deg, var(--accent-3), var(--accent-cyan), var(--accent-warm));
+.hero h1 .line1 { display: block; color: var(--text-primary); }
+.hero h1 .line2 {
+  display: block;
+  background: linear-gradient(135deg, var(--accent-gem), var(--accent-sapphire), var(--accent-emerald));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .hero-subtitle {
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-size: clamp(1rem, 2vw, 1.25rem);
   color: var(--text-secondary);
-  max-width: 600px;
-  line-height: 1.6;
-  font-weight: 300;
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  animation: fadeInDown 0.8s ease-out 0.6s both;
+}
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
   margin-bottom: 3rem;
-  animation: fadeInUp 0.8s ease 0.2s both;
+  animation: fadeInDown 0.8s ease-out 0.7s both;
+}
+
+.hero-meta span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .hero-cta {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  animation: fadeInUp 0.8s ease 0.3s both;
-}
-
-.btn-primary {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-  color: white;
-  border: none;
-  border-radius: 100px;
-  padding: 16px 32px;
-  font-family: 'Outfit', sans-serif;
+  padding: 16px 36px;
+  background: linear-gradient(135deg, var(--accent-gem), #a855f7);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
   font-size: 1rem;
   font-weight: 600;
+  border: none;
+  border-radius: 100px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition);
+  animation: fadeInUp 0.8s ease-out 0.9s both;
   text-decoration: none;
-  box-shadow: 0 4px 30px var(--glow-1);
-}
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 40px var(--glow-2);
+  position: relative;
+  overflow: hidden;
 }
 
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--glass);
-  color: var(--text-primary);
-  border: 1px solid var(--glass-border);
-  border-radius: 100px;
-  padding: 16px 32px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  backdrop-filter: blur(20px);
+.hero-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+  transform: translateX(-100%);
+  transition: 0.6s;
 }
-.btn-secondary:hover {
-  background: var(--bg-card-hover);
-  border-color: rgba(255,255,255,0.15);
-  transform: translateY(-2px);
-}
+
+.hero-cta:hover::before { transform: translateX(100%); }
+.hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(168,85,247,0.4); }
 
 .scroll-indicator {
   position: absolute;
@@ -209,1313 +230,1119 @@ body {
   font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  animation: fadeInUp 0.8s ease 0.5s both;
+  animation: fadeInUp 0.8s ease-out 1.2s both;
 }
 
-.scroll-indicator .line {
+.scroll-line {
   width: 1px;
   height: 40px;
-  background: linear-gradient(to bottom, var(--accent-1), transparent);
-  animation: scrollLine 2s ease infinite;
+  background: linear-gradient(to bottom, var(--accent-gem), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
 }
 
-@keyframes scrollLine {
-  0% { transform: scaleY(0); transform-origin: top; }
-  50% { transform: scaleY(1); transform-origin: top; }
-  51% { transform: scaleY(1); transform-origin: bottom; }
-  100% { transform: scaleY(0); transform-origin: bottom; }
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+  50% { opacity: 1; transform: scaleY(1); }
 }
 
-/* ═══ STATS BAR ═══ */
-.stats-bar {
-  display: flex;
-  justify-content: center;
-  gap: 3rem;
-  padding: 3rem 2rem;
-  flex-wrap: wrap;
+/* ═══════════════ MAIN CONTENT ═══════════════ */
+.main-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem 6rem;
 }
 
-.stat-item {
-  text-align: center;
-}
-.stat-number {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 2.5rem;
-  font-weight: 600;
-  background: linear-gradient(135deg, var(--accent-3), var(--accent-cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.stat-label {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-top: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* ═══ PROGRESS SECTION ═══ */
+/* ═══════════════ PROGRESS BAR ═══════════════ */
 .progress-section {
-  max-width: 900px;
-  margin: 0 auto 3rem;
-  padding: 0 2rem;
-}
-
-.progress-container {
-  background: var(--glass);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius);
+  margin-bottom: 4rem;
   padding: 2rem;
-  backdrop-filter: blur(20px);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
 }
 
 .progress-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 1rem;
 }
 
-.progress-title {
-  font-size: 1.1rem;
-  font-weight: 600;
+.progress-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
 .progress-count {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.9rem;
-  color: var(--accent-3);
+  font-size: 0.85rem;
+  color: var(--accent-gem);
 }
 
-.progress-bar-bg {
-  width: 100%;
-  height: 8px;
+.progress-bar {
+  height: 6px;
   background: rgba(255,255,255,0.05);
-  border-radius: 100px;
+  border-radius: 3px;
   overflow: hidden;
-  margin-bottom: 1rem;
 }
 
-.progress-bar-fill {
+.progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-cyan));
-  border-radius: 100px;
-  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
   width: 0%;
+  background: linear-gradient(90deg, var(--accent-gem), var(--accent-emerald));
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.progress-badges {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.badge {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-  transition: all 0.4s ease;
-  background: var(--bg-deep);
-  position: relative;
-}
-.badge.completed {
-  border-color: var(--accent-green);
-  background: rgba(16,185,129,0.15);
-  animation: badgePop 0.5s ease;
-}
-
-@keyframes badgePop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.3); }
-  100% { transform: scale(1); }
-}
-
-/* ═══ SECTIONS ═══ */
-.section {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 4rem 2rem;
-}
-
-.section-header {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
+/* ═══════════════ SECTION HEADERS ═══════════════ */
 .section-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.8rem;
-  color: var(--accent-1);
-  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
   letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
   margin-bottom: 1rem;
 }
 
-.section-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
-  margin-bottom: 1rem;
+.section-label::before {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: var(--accent-gem);
 }
 
-.section-desc {
-  color: var(--text-secondary);
-  font-size: 1.1rem;
-  max-width: 600px;
-  margin: 0 auto;
-  line-height: 1.6;
-  font-weight: 300;
-}
-
-/* ═══ MISSION CARDS ═══ */
-.missions-grid {
+/* ═══════════════ GEM GRID ═══════════════ */
+.gem-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
-.mission-card {
+/* ═══════════════ GEM CARD ═══════════════ */
+.gem-card {
   background: var(--bg-card);
-  border: 1px solid var(--glass-border);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
   cursor: pointer;
+  transition: var(--transition);
   position: relative;
+  animation: fadeInUp 0.6s ease-out both;
 }
-.mission-card::before {
+
+.gem-card::before {
   content: '';
   position: absolute;
-  inset: 0;
-  border-radius: var(--radius);
-  padding: 1px;
-  background: linear-gradient(135deg, transparent 40%, var(--card-accent, var(--accent-1)) 100%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--card-accent);
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.3s;
 }
-.mission-card:hover::before { opacity: 1; }
-.mission-card:hover {
+
+.gem-card:hover {
+  border-color: rgba(255,255,255,0.1);
   transform: translateY(-4px);
-  background: var(--bg-card-hover);
   box-shadow: 0 20px 60px rgba(0,0,0,0.3);
 }
 
-.mission-card.completed {
-  border-color: rgba(16,185,129,0.2);
-}
-.mission-card.completed .mission-check {
-  background: var(--accent-green);
-  color: white;
+.gem-card:hover::before { opacity: 1; }
+
+.gem-card.completed {
+  border-color: rgba(52, 211, 153, 0.2);
 }
 
-.card-top {
+.gem-card.completed::after {
+  content: '✓';
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 28px;
+  height: 28px;
+  background: var(--accent-emerald);
+  color: #0a0a12;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  z-index: 5;
+}
+
+.card-header {
   padding: 1.5rem 1.5rem 0;
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
+  gap: 1rem;
 }
 
-.mission-icon {
-  width: 52px; height: 52px;
-  border-radius: var(--radius-sm);
+.card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-  background: var(--card-accent-bg, var(--glow-1));
-  border: 1px solid var(--card-accent-border, rgba(99,102,241,0.2));
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  background: var(--card-accent-bg);
 }
 
-.mission-check {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  transition: all 0.3s ease;
-  background: transparent;
+.card-titles {
+  flex: 1;
+  min-width: 0;
 }
 
-.card-body {
-  padding: 1.25rem 1.5rem;
-}
-
-.mission-number {
+.card-number {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.7rem;
   color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 6px;
-}
-
-.mission-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-  line-height: 1.3;
-}
-
-.mission-desc {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  margin-bottom: 1rem;
-}
-
-.mission-tags {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-}
-
-.tag {
-  font-size: 0.7rem;
-  padding: 4px 10px;
-  border-radius: 100px;
-  background: rgba(255,255,255,0.05);
-  color: var(--text-secondary);
-  font-weight: 500;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
-}
-.tag.easy { color: var(--accent-green); background: rgba(16,185,129,0.1); }
-.tag.medium { color: var(--accent-warm); background: rgba(245,158,11,0.1); }
-
-.card-footer {
-  padding: 0 1.5rem 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin-bottom: 4px;
 }
 
-.time-estimate {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.card-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text-primary);
 }
 
-.start-btn {
-  font-family: 'Outfit', sans-serif;
+.card-body {
+  padding: 1rem 1.5rem 1.5rem;
+}
+
+.card-objective {
   font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--accent-3);
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.3s ease;
-}
-.start-btn:hover {
-  color: white;
-  gap: 10px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* ═══ MODAL ═══ */
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.card-tag {
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  border-radius: 100px;
+  background: rgba(255,255,255,0.04);
+  color: var(--text-muted);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.card-tag.tool { color: var(--accent-sapphire); border-color: rgba(96,165,250,0.2); background: rgba(96,165,250,0.06); }
+
+/* ═══════════════ MODAL OVERLAY ═══════════════ */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 1000;
   background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 2rem;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
-  padding: 1rem;
+  transition: all 0.35s ease;
 }
+
 .modal-overlay.active {
   opacity: 1;
   visibility: visible;
 }
 
 .modal {
-  background: #13131a;
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius);
-  max-width: 720px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
   width: 100%;
-  max-height: 90vh;
+  max-width: 720px;
+  max-height: 85vh;
   overflow-y: auto;
   transform: translateY(20px) scale(0.97);
-  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
 }
+
 .modal-overlay.active .modal {
   transform: translateY(0) scale(1);
 }
 
-.modal::-webkit-scrollbar { width: 6px; }
-.modal::-webkit-scrollbar-track { background: transparent; }
-.modal::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
-
-.modal-header {
-  padding: 2rem 2rem 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  position: sticky;
-  top: 0;
-  background: linear-gradient(to bottom, #13131a 80%, transparent);
-  z-index: 2;
-  padding-bottom: 1rem;
-}
-
-.modal-header-left {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.modal-icon {
-  width: 48px; height: 48px;
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
+.modal-accent {
+  height: 3px;
+  background: var(--card-accent);
+  border-radius: 20px 20px 0 0;
 }
 
 .modal-close {
-  width: 36px; height: 36px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
   border-radius: 50%;
-  border: 1px solid var(--glass-border);
-  background: var(--glass);
   color: var(--text-secondary);
+  font-size: 1.1rem;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  font-size: 1.2rem;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
+  transition: var(--transition);
+  z-index: 5;
 }
+
 .modal-close:hover {
-  background: var(--bg-card-hover);
-  color: white;
+  background: rgba(255,255,255,0.1);
+  color: var(--text-primary);
 }
 
 .modal-content {
-  padding: 1.5rem 2rem 2rem;
+  padding: 2.5rem;
 }
 
-.modal-label {
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.modal-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  background: var(--card-accent-bg);
+}
+
+.modal-number {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.75rem;
   color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
 }
 
 .modal-title {
-  font-size: 1.5rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
   font-weight: 700;
 }
 
-.modal-section {
-  margin-bottom: 1.5rem;
-}
-
-.modal-section-title {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.modal-text {
+.modal-objective {
   font-size: 0.95rem;
   color: var(--text-secondary);
   line-height: 1.7;
+  margin-bottom: 2rem;
+  padding-left: 0;
 }
 
-.prompt-box {
-  background: rgba(0,0,0,0.4);
-  border: 1px solid var(--glass-border);
+/* Configuration & Action blocks */
+.block {
+  margin-bottom: 1.5rem;
   border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.block-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.block-label.config {
+  background: rgba(192,132,252,0.08);
+  color: var(--accent-gem);
+  border: 1px solid rgba(192,132,252,0.15);
+  border-bottom: none;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.block-label.action {
+  background: rgba(52,211,153,0.08);
+  color: var(--accent-emerald);
+  border: 1px solid rgba(52,211,153,0.15);
+  border-bottom: none;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.block-body {
   padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  background: rgba(255,255,255,0.015);
+}
+
+.field {
+  margin-bottom: 1rem;
+}
+
+.field:last-child { margin-bottom: 0; }
+
+.field-key {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.field-value {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--text-primary);
+}
+
+.field-value.mono {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.82rem;
+  color: var(--accent-amber);
+}
+
+.tool-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  background: rgba(96,165,250,0.08);
+  border: 1px solid rgba(96,165,250,0.2);
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--accent-sapphire);
+}
+
+/* Prompt box with copy */
+.prompt-box {
+  position: relative;
+  background: var(--bg-deep);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.prompt-text {
+  font-size: 0.88rem;
   line-height: 1.7;
   color: var(--text-primary);
-  position: relative;
-  white-space: pre-wrap;
-  word-break: break-word;
+  font-style: italic;
+  padding-right: 40px;
 }
 
 .copy-btn {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: var(--glass);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-xs);
-  padding: 6px 14px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--text-secondary);
+  width: 32px;
+  height: 32px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
   cursor: pointer;
-  transition: all 0.2s ease;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.copy-btn:hover {
+  background: rgba(192,132,252,0.15);
+  color: var(--accent-gem);
+  border-color: rgba(192,132,252,0.3);
+}
+
+.copy-btn.copied {
+  background: rgba(52,211,153,0.15);
+  color: var(--accent-emerald);
+  border-color: rgba(52,211,153,0.3);
+}
+
+.observation {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  background: rgba(251,191,36,0.05);
+  border-left: 2px solid var(--accent-amber);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.observation strong {
+  color: var(--accent-amber);
+  font-weight: 600;
+}
+
+/* Complete button */
+.complete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  margin-top: 2rem;
+  background: rgba(52,211,153,0.08);
+  border: 1px solid rgba(52,211,153,0.2);
+  border-radius: var(--radius-sm);
+  color: var(--accent-emerald);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.complete-btn:hover {
+  background: rgba(52,211,153,0.15);
+  border-color: rgba(52,211,153,0.35);
+}
+
+.complete-btn.is-completed {
+  background: var(--accent-emerald);
+  color: #0a0a12;
+  border-color: var(--accent-emerald);
+}
+
+/* Navigation in modal */
+.modal-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2.5rem 2rem;
+}
+
+.nav-btn {
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-}
-.copy-btn:hover {
-  background: var(--accent-1);
-  border-color: var(--accent-1);
-  color: white;
-}
-.copy-btn.copied {
-  background: var(--accent-green);
-  border-color: var(--accent-green);
-  color: white;
-}
-
-.tip-box {
-  background: rgba(245,158,11,0.08);
-  border: 1px solid rgba(245,158,11,0.15);
-  border-radius: var(--radius-sm);
-  padding: 1rem 1.25rem;
-  font-size: 0.9rem;
-  color: rgba(245,158,11,0.9);
-  line-height: 1.6;
-}
-
-.tip-box strong {
-  color: var(--accent-warm);
-}
-
-.expected-box {
-  background: rgba(16,185,129,0.08);
-  border: 1px solid rgba(16,185,129,0.15);
-  border-radius: var(--radius-sm);
-  padding: 1rem 1.25rem;
-  font-size: 0.9rem;
-  color: rgba(16,185,129,0.9);
-  line-height: 1.6;
-}
-
-.variation-box {
-  background: rgba(99,102,241,0.08);
-  border: 1px solid rgba(99,102,241,0.15);
-  border-radius: var(--radius-sm);
-  padding: 1rem 1.25rem;
-  font-size: 0.9rem;
-  color: rgba(167,139,250,0.9);
-  line-height: 1.6;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 1rem;
-  padding-top: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.btn-complete {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: linear-gradient(135deg, var(--accent-green), #059669);
-  color: white;
-  border: none;
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
   border-radius: 100px;
-  padding: 14px 28px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
-}
-.btn-complete:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(16,185,129,0.3); }
-.btn-complete:disabled { opacity: 0.5; cursor: default; transform: none; box-shadow: none; }
-
-.btn-gemini {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: linear-gradient(135deg, #4285f4, #34a853);
-  color: white;
-  border: none;
-  border-radius: 100px;
-  padding: 14px 28px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
-.btn-gemini:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(66,133,244,0.3); }
-
-/* ═══ TIPS SECTION ═══ */
-.tips-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
+  transition: var(--transition);
 }
 
-.tip-card {
-  background: var(--bg-card);
-  border: 1px solid var(--glass-border);
+.nav-btn:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-primary);
+}
+
+.nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* ═══════════════ GOLDEN RULE ═══════════════ */
+.golden-rule {
+  margin-top: 4rem;
+  padding: 2.5rem;
+  background: linear-gradient(135deg, rgba(251,191,36,0.06), rgba(192,132,252,0.06));
+  border: 1px solid rgba(251,191,36,0.15);
   border-radius: var(--radius);
-  padding: 1.5rem;
-  transition: all 0.3s ease;
-}
-.tip-card:hover {
-  background: var(--bg-card-hover);
-  transform: translateY(-2px);
+  text-align: center;
 }
 
-.tip-card-icon {
+.golden-rule-icon {
   font-size: 2rem;
   margin-bottom: 1rem;
 }
 
-.tip-card-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.tip-card-text {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-/* ═══ CELEBRATION ═══ */
-.celebration-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,0,0,0.8);
-  backdrop-filter: blur(20px);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.5s ease;
-}
-.celebration-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.celebration-content {
-  text-align: center;
-  animation: celebPop 0.6s cubic-bezier(0.4,0,0.2,1);
-}
-
-@keyframes celebPop {
-  0% { transform: scale(0.5); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-.celebration-emoji {
-  font-size: 5rem;
-  margin-bottom: 1rem;
-}
-
-.celebration-title {
+.golden-rule h3 {
   font-family: 'Playfair Display', serif;
-  font-size: 3rem;
-  font-weight: 900;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, var(--accent-warm), var(--accent-rose), var(--accent-3));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--accent-amber);
 }
 
-.celebration-text {
-  font-size: 1.2rem;
+.golden-rule p {
+  font-size: 1rem;
   color: var(--text-secondary);
-  margin-bottom: 2rem;
+  line-height: 1.7;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
-/* ═══ FOOTER ═══ */
+.golden-rule em {
+  color: var(--text-primary);
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* ═══════════════ FOOTER ═══════════════ */
 .footer {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 3rem 2rem;
   color: var(--text-muted);
-  font-size: 0.85rem;
-  border-top: 1px solid var(--glass-border);
-  margin-top: 4rem;
-}
-.footer a { color: var(--accent-3); text-decoration: none; }
-.footer a:hover { text-decoration: underline; }
-
-/* ═══ CONFETTI ═══ */
-.confetti-piece {
-  position: fixed;
-  width: 10px;
-  height: 10px;
-  z-index: 2001;
-  pointer-events: none;
+  font-size: 0.78rem;
+  position: relative;
+  z-index: 2;
 }
 
-/* ═══ ANIMATIONS ═══ */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
+.footer a {
+  color: var(--accent-gem);
+  text-decoration: none;
+}
+
+/* ═══════════════ ANIMATIONS ═══════════════ */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.fade-in {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.6s cubic-bezier(0.4,0,0.2,1);
-}
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* ═══ RESPONSIVE ═══ */
-@media (max-width: 768px) {
-  .missions-grid { grid-template-columns: 1fr; }
-  .stats-bar { gap: 2rem; }
-  .modal { margin: 0.5rem; }
-  .modal-content { padding: 1rem 1.5rem 1.5rem; }
-  .hero-cta { flex-direction: column; align-items: center; }
-}
-
-/* ═══ PARTICLE FIELD ═══ */
-.particle {
+/* ═══════════════ TOAST ═══════════════ */
+.toast {
   position: fixed;
-  width: 2px;
-  height: 2px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 50%;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  padding: 12px 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  z-index: 2000;
+  opacity: 0;
+  transition: all 0.35s ease;
   pointer-events: none;
-  z-index: 0;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ═══════════════ RESPONSIVE ═══════════════ */
+@media (max-width: 768px) {
+  .gem-grid { grid-template-columns: 1fr; }
+  .modal-content { padding: 1.5rem; }
+  .modal-nav { padding: 0 1.5rem 1.5rem; }
+  .hero { min-height: 90vh; padding: 1.5rem; }
+  .main-content { padding: 0 1rem 4rem; }
+  .progress-section { padding: 1.25rem; }
+  .modal { max-height: 90vh; }
+}
+
+@media (max-width: 420px) {
+  .card-header { padding: 1.25rem 1.25rem 0; }
+  .card-body { padding: 0.85rem 1.25rem 1.25rem; }
+  .hero-meta { gap: 0.75rem; }
 }
 </style>
 </head>
 <body>
 
-<!-- Background Orbs -->
-<div class="gradient-orb orb-1"></div>
-<div class="gradient-orb orb-2"></div>
-<div class="gradient-orb orb-3"></div>
+<div class="atmosphere"></div>
+<div class="noise"></div>
 
-<div class="app-wrapper">
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Formation IA — Institut Saint-Luc de Frameries
+  </div>
+  <h1>
+    <span class="line1">Le Décalogue</span>
+    <span class="line2">du Créateur de Gems</span>
+  </h1>
+  <p class="hero-subtitle">
+    12 exercices pratiques pour maîtriser l'art de configurer des Gems Gemini et transformer votre enseignement.
+  </p>
+  <div class="hero-meta">
+    <span>💎 12 ateliers</span>
+    <span>⏱ ~90 min</span>
+    <span>🎯 Version gratuite de Gemini</span>
+  </div>
+  <a href="#atelier" class="hero-cta" onclick="document.getElementById('atelier').scrollIntoView({behavior:'smooth'});return false;">
+    Commencer l'aventure
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</section>
 
-  <!-- ═══ HERO ═══ -->
-  <section class="hero" id="hero">
-    <div class="hero-badge">
-      <span class="dot"></span>
-      Formation en cours · Institut Saint-Luc Frameries
-    </div>
-    <h1>
-      <span class="gradient-text">AI Lab</span><br>
-      Formation IA
-    </h1>
-    <p class="hero-subtitle">
-      12 missions interactives pour découvrir le potentiel de l'intelligence artificielle dans votre pratique pédagogique quotidienne.
-    </p>
-    <div class="hero-cta">
-      <a href="#missions" class="btn-primary">
-        🚀 Commencer l'aventure
-      </a>
-      <a href="https://gemini.google.com" target="_blank" class="btn-secondary">
-        ✦ Ouvrir Gemini
-      </a>
-    </div>
-    <div class="scroll-indicator">
-      <span>Découvrir</span>
-      <div class="line"></div>
-    </div>
-  </section>
+<!-- ═══════════════ MAIN ═══════════════ -->
+<main class="main-content" id="atelier">
 
-  <!-- ═══ STATS ═══ -->
-  <div class="stats-bar">
-    <div class="stat-item fade-in">
-      <div class="stat-number">12</div>
-      <div class="stat-label">Missions</div>
+  <!-- Progress -->
+  <div class="progress-section">
+    <div class="progress-header">
+      <span class="progress-label">Votre progression</span>
+      <span class="progress-count" id="progressCount">0 / 12</span>
     </div>
-    <div class="stat-item fade-in">
-      <div class="stat-number" id="completedCount">0</div>
-      <div class="stat-label">Complétées</div>
-    </div>
-    <div class="stat-item fade-in">
-      <div class="stat-number">~45</div>
-      <div class="stat-label">Minutes</div>
-    </div>
-    <div class="stat-item fade-in">
-      <div class="stat-number">∞</div>
-      <div class="stat-label">Possibilités</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
     </div>
   </div>
 
-  <!-- ═══ PROGRESS ═══ -->
-  <div class="progress-section fade-in">
-    <div class="progress-container">
-      <div class="progress-header">
-        <span class="progress-title">Votre progression</span>
-        <span class="progress-count"><span id="progressNum">0</span>/12</span>
-      </div>
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" id="progressBar"></div>
-      </div>
-      <div class="progress-badges" id="progressBadges"></div>
-    </div>
+  <!-- Grid -->
+  <div class="section-label">Les 12 Gems</div>
+  <div class="gem-grid" id="gemGrid"></div>
+
+  <!-- Golden Rule -->
+  <div class="golden-rule">
+    <div class="golden-rule-icon">💡</div>
+    <h3>La Règle d'Or</h3>
+    <p>« Le Gem est aussi intelligent que <em>sa configuration est précise</em>. »</p>
   </div>
+</main>
 
-  <!-- ═══ MISSIONS ═══ -->
-  <section class="section" id="missions">
-    <div class="section-header fade-in">
-      <div class="section-label">// Missions</div>
-      <h2 class="section-title">Explorez les possibilités</h2>
-      <p class="section-desc">
-        Chaque mission vous fait découvrir une utilisation concrète de l'IA. Copiez le prompt, testez-le dans Gemini, et marquez la mission comme terminée.
-      </p>
-    </div>
-    <div class="missions-grid" id="missionsGrid"></div>
-  </section>
+<footer class="footer">
+  Formation IA pour enseignants — Institut Saint-Luc de Frameries — 2025<br>
+  Créé avec ❤️ pour l'innovation pédagogique
+</footer>
 
-  <!-- ═══ TIPS ═══ -->
-  <section class="section" id="tips">
-    <div class="section-header fade-in">
-      <div class="section-label">// Pro Tips</div>
-      <h2 class="section-title">Les clés du succès</h2>
-      <p class="section-desc">
-        Quelques principes essentiels pour tirer le meilleur de l'IA générative.
-      </p>
-    </div>
-    <div class="tips-grid">
-      <div class="tip-card fade-in">
-        <div class="tip-card-icon">🎯</div>
-        <div class="tip-card-title">Soyez précis</div>
-        <p class="tip-card-text">Plus votre demande est détaillée et contextualisée, meilleure sera la réponse. Précisez le niveau, la matière, le format souhaité.</p>
-      </div>
-      <div class="tip-card fade-in">
-        <div class="tip-card-icon">🔄</div>
-        <div class="tip-card-title">Itérez</div>
-        <p class="tip-card-text">La première réponse est un point de départ. Affinez avec des demandes complémentaires : « Rends-le plus simple », « Ajoute un exemple ».</p>
-      </div>
-      <div class="tip-card fade-in">
-        <div class="tip-card-icon">🎭</div>
-        <div class="tip-card-title">Donnez un rôle</div>
-        <p class="tip-card-text">« Tu es un professeur de maths expérimenté » oriente l'IA vers un registre et une expertise adaptés.</p>
-      </div>
-      <div class="tip-card fade-in">
-        <div class="tip-card-icon">📐</div>
-        <div class="tip-card-title">Structurez</div>
-        <p class="tip-card-text">Demandez un format précis : tableau, liste à puces, étapes numérotées. L'IA suit les consignes de format avec fiabilité.</p>
-      </div>
-      <div class="tip-card fade-in">
-        <div class="tip-card-icon">🧪</div>
-        <div class="tip-card-title">Expérimentez</div>
-        <p class="tip-card-text">Testez différentes formulations pour la même demande. Vous découvrirez que certains mots-clés donnent des résultats surprenants.</p>
-      </div>
-      <div class="tip-card fade-in">
-        <div class="tip-card-icon">⚡</div>
-        <div class="tip-card-title">Vérifiez</div>
-        <p class="tip-card-text">L'IA peut inventer des informations. Vérifiez toujours les faits, dates et chiffres avant d'utiliser le contenu en classe.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ FOOTER ═══ -->
-  <footer class="footer">
-    <p>AI Lab · Formation IA pour Enseignants · Institut Saint-Luc de Frameries<br>
-    Créé avec ❤️ pour la journée de formation · <a href="https://gemini.google.com" target="_blank">Accéder à Gemini</a></p>
-  </footer>
-
-</div>
-
-<!-- ═══ MODAL ═══ -->
+<!-- ═══════════════ MODAL ═══════════════ -->
 <div class="modal-overlay" id="modalOverlay">
-  <div class="modal" id="modal"></div>
-</div>
-
-<!-- ═══ CELEBRATION ═══ -->
-<div class="celebration-overlay" id="celebrationOverlay">
-  <div class="celebration-content">
-    <div class="celebration-emoji">🎓🎉🏆</div>
-    <h2 class="celebration-title">Félicitations !</h2>
-    <p class="celebration-text">Vous avez complété toutes les missions.<br>Vous êtes prêt(e) à intégrer l'IA dans votre pratique !</p>
-    <button class="btn-primary" onclick="closeCelebration()">✦ Merci !</button>
+  <div class="modal" id="modal">
+    <div class="modal-accent" id="modalAccent"></div>
+    <button class="modal-close" onclick="closeModal()" aria-label="Fermer">✕</button>
+    <div class="modal-content" id="modalContent"></div>
+    <div class="modal-nav">
+      <button class="nav-btn" id="prevBtn" onclick="navigateGem(-1)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Précédent
+      </button>
+      <button class="nav-btn" id="nextBtn" onclick="navigateGem(1)">
+        Suivant
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
   </div>
 </div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
 <script>
-// ═══ MISSIONS DATA ═══
-const missions = [
+// ═══════════════ DATA ═══════════════
+const gems = [
   {
     id: 1,
-    icon: "📝",
-    title: "Le Créateur de QCM",
-    desc: "Générez un questionnaire à choix multiples prêt à l'emploi en quelques secondes pour n'importe quelle matière.",
-    tags: ["Facile", "Évaluation"],
-    tagClasses: ["easy", ""],
-    time: "3 min",
-    accentBg: "rgba(16,185,129,0.1)",
-    accentBorder: "rgba(16,185,129,0.2)",
-    accent: "#10b981",
-    objective: "Découvrir comment l'IA peut créer des évaluations structurées instantanément.",
-    prompt: `Tu es un enseignant expérimenté. Crée un QCM de 5 questions sur le thème de la photosynthèse pour des élèves de 3e secondaire.\n\nPour chaque question :\n- Propose 4 choix (A, B, C, D)\n- Indique la bonne réponse\n- Ajoute une courte explication\n\nNiveau de difficulté : intermédiaire.`,
-    tip: "Adaptez le sujet à VOTRE matière ! Remplacez « photosynthèse » par n'importe quel thème de votre cours. Vous pouvez aussi préciser « avec des questions pièges » ou « uniquement des questions de compréhension ».",
-    expected: "Gemini va produire 5 questions formatées avec les réponses et explications. Vous pouvez ensuite demander « Transforme cela en format tableau » ou « Ajoute 5 questions plus difficiles ».",
-    variation: "Essayez : « Crée un QCM de 5 questions sur [votre sujet] mais formule les questions comme des situations de la vie réelle »."
+    emoji: "🎨",
+    name: "L'Illustrateur de Contes",
+    accent: "linear-gradient(135deg, #c084fc, #a855f7)",
+    accentBg: "rgba(192,132,252,0.1)",
+    objective: "Créer un style visuel unique pour ne pas avoir des images disparates dans un cours.",
+    tools: ["Générer des images"],
+    config: {
+      nom: "Pixar-History",
+      instructions: "Tu es un illustrateur pour enfants. Tu génères uniquement des images au style 'Film d'animation 3D', coloré et doux. Pas de texte sur les images.",
+      outil: "✅ Générer des images"
+    },
+    prompt: "Dessine-moi la prise de la Bastille.",
+    observation: "Vérifier que le style \"Pixar\" est respecté sans l'avoir demandé dans le prompt."
   },
   {
     id: 2,
-    icon: "🎯",
-    title: "Le Différenciateur",
-    desc: "Adaptez automatiquement un même contenu pour différents niveaux d'élèves, de débutant à avancé.",
-    tags: ["Facile", "Différenciation"],
-    tagClasses: ["easy", ""],
-    time: "3 min",
-    accentBg: "rgba(99,102,241,0.1)",
-    accentBorder: "rgba(99,102,241,0.2)",
-    accent: "#6366f1",
-    objective: "Comprendre comment l'IA peut aider à la différenciation pédagogique sans multiplier le travail de préparation.",
-    prompt: `Explique le concept de "l'offre et la demande" en économie de 3 manières différentes :\n\n1. Pour un élève de 3e secondaire qui découvre le sujet (utilise un langage simple et un exemple du quotidien)\n\n2. Pour un élève de 5e secondaire (ajoute du vocabulaire technique)\n\n3. Pour un élève avancé qui prépare un examen (niveau plus analytique avec les mécanismes de marché)`,
-    tip: "C'est l'un des usages les plus puissants de l'IA pour un enseignant ! Un seul prompt et vous obtenez 3 versions adaptées. Remplacez le concept par n'importe quel sujet de votre programme.",
-    expected: "Trois explications du même concept avec une complexité croissante. Observez comment le vocabulaire, les exemples et la profondeur s'adaptent à chaque niveau.",
-    variation: "Ajoutez : « Pour chaque niveau, propose aussi un petit exercice d'application adapté »."
+    emoji: "🌍",
+    name: "Le Journaliste Junior",
+    accent: "linear-gradient(135deg, #60a5fa, #3b82f6)",
+    accentBg: "rgba(96,165,250,0.1)",
+    objective: "Obtenir des faits récents pour l'Éducation aux Médias ou la Géo.",
+    tools: ["Google Search", "Deep Research"],
+    config: {
+      nom: "Fact-Checker",
+      instructions: "Tu es un vérificateur de faits. Tu dois rechercher les dernières informations disponibles sur le web (moins de 48h si possible). Tu cites toujours tes sources avec des liens.",
+      outil: "✅ Google Search / Deep Research"
+    },
+    prompt: "Quels sont les derniers développements de la mission spatiale Artemis de la NASA cette semaine ?",
+    observation: null
   },
   {
     id: 3,
-    icon: "📊",
-    title: "La Grille d'Évaluation",
-    desc: "Créez une grille d'évaluation critériée professionnelle en un instant, avec niveaux de maîtrise et descripteurs.",
-    tags: ["Facile", "Évaluation"],
-    tagClasses: ["easy", ""],
-    time: "3 min",
-    accentBg: "rgba(244,63,94,0.1)",
-    accentBorder: "rgba(244,63,94,0.2)",
-    accent: "#f43f5e",
-    objective: "Découvrir comment l'IA génère des outils d'évaluation structurés et professionnels.",
-    prompt: `Crée une grille d'évaluation pour une présentation orale d'un élève de 4e secondaire.\n\nLa grille doit contenir :\n- 5 critères d'évaluation\n- 4 niveaux de maîtrise (Insuffisant / En développement / Satisfaisant / Excellent)\n- Un descripteur précis pour chaque case\n- Un barème sur 20 points\n\nPrésente le résultat sous forme de tableau.`,
-    tip: "Les grilles d'évaluation sont longues à créer manuellement. L'IA les génère en quelques secondes. Vous pouvez ensuite affiner : « Rends les descripteurs plus courts » ou « Ajoute un critère sur la créativité ».",
-    expected: "Un tableau complet avec 5 critères × 4 niveaux = 20 descripteurs, plus un barème cohérent. C'est un gain de temps considérable !",
-    variation: "Essayez pour votre propre matière : « Crée une grille d'évaluation pour [type de travail] en [matière] »."
+    emoji: "📝",
+    name: "Le Séquenceur",
+    accent: "linear-gradient(135deg, #34d399, #10b981)",
+    accentBg: "rgba(52,211,153,0.1)",
+    objective: "Produire un document propre et structuré, prêt à être imprimé.",
+    tools: ["Canevas"],
+    config: {
+      nom: "Architecte de Séquence",
+      instructions: "Tu aides à créer des plans de cours. Tu utilises toujours cette structure : 1. Objectifs, 2. Matériel, 3. Déroulé (min par min), 4. Différenciation. Rédige le résultat final dans Canevas.",
+      outil: "✅ Canevas"
+    },
+    prompt: "Prépare une leçon de 50 minutes sur le cycle de l'eau pour des élèves de 8 ans.",
+    observation: null
   },
   {
     id: 4,
-    icon: "💡",
-    title: "L'Inspirateur de Cours",
-    desc: "Obtenez des idées d'activités créatives et engageantes pour dynamiser vos séquences de cours.",
-    tags: ["Facile", "Créativité"],
-    tagClasses: ["easy", ""],
-    time: "3 min",
-    accentBg: "rgba(245,158,11,0.1)",
-    accentBorder: "rgba(245,158,11,0.2)",
-    accent: "#f59e0b",
-    objective: "Explorer la capacité de l'IA à proposer des idées pédagogiques innovantes et réalisables.",
-    prompt: `Tu es un conseiller pédagogique créatif. Je suis professeur de français en 4e secondaire et je dois enseigner la rédaction d'un texte argumentatif.\n\nPropose-moi 5 activités originales et motivantes pour introduire ce sujet. Pour chaque activité :\n- Donne un nom accrocheur\n- Décris le déroulement en 3-4 étapes\n- Indique la durée estimée\n- Précise le matériel nécessaire`,
-    tip: "N'hésitez pas à ajouter des contraintes : « sans matériel numérique », « en travail de groupe », « pour une classe peu motivée ». Plus le contexte est riche, plus les suggestions sont pertinentes.",
-    expected: "5 activités détaillées avec des idées que vous n'auriez peut-être pas envisagées. L'IA est un excellent brainstorming partner !",
-    variation: "Changez la matière et le sujet pour votre propre cours. Essayez aussi : « Propose une activité gamifiée pour réviser [sujet] »."
+    emoji: "🧠",
+    name: "Le Correcteur Strict",
+    accent: "linear-gradient(135deg, #fb7185, #ef4444)",
+    accentBg: "rgba(251,113,133,0.1)",
+    objective: "Utiliser ses propres documents de référence (Grilles d'évaluation).",
+    tools: ["Connaissances"],
+    config: {
+      nom: "Jury-Exam",
+      instructions: "Tu es membre d'un jury. Tu évalues le texte fourni en te basant STRICTEMENT sur la grille PDF fournie en connaissance. Justifie chaque note.",
+      outil: "📥 Importer un PDF « Grille_Evaluation.pdf »"
+    },
+    prompt: "Voici l'introduction de la dissertation de l'élève : « La Révolution française a changé le monde. Elle a commencé en 1789 et a duré dix ans. Beaucoup de gens sont morts mais la liberté a triomphé. » Note-la.",
+    observation: "Le Gem doit se baser sur la grille importée et non inventer ses propres critères."
   },
   {
     id: 5,
-    icon: "✉️",
-    title: "L'Assistant Email",
-    desc: "Rédigez des emails professionnels impeccables : parents, collègues, direction, en un clin d'œil.",
-    tags: ["Facile", "Communication"],
-    tagClasses: ["easy", ""],
-    time: "2 min",
-    accentBg: "rgba(6,182,212,0.1)",
-    accentBorder: "rgba(6,182,212,0.2)",
-    accent: "#06b6d4",
-    objective: "Voir comment l'IA aide à la communication professionnelle au quotidien.",
-    prompt: `Rédige un email professionnel et bienveillant à destination des parents d'un élève de 4e secondaire.\n\nContexte : L'élève a un bon potentiel mais manque de régularité dans son travail à domicile. Ses résultats sont en baisse depuis 2 mois.\n\nL'email doit :\n- Rester positif et constructif\n- Mentionner les qualités de l'élève\n- Exprimer les inquiétudes avec diplomatie\n- Proposer une rencontre\n- Faire environ 150 mots`,
-    tip: "L'IA excelle pour trouver le bon ton dans des situations délicates. Vous pouvez demander une version « plus formelle », « plus chaleureuse » ou « plus directe » selon vos besoins.",
-    expected: "Un email bien structuré, au ton professionnel et bienveillant, prêt à être personnalisé avec le nom de l'élève et envoyé.",
-    variation: "Testez avec d'autres contextes : email au directeur pour proposer un projet, message aux collègues pour organiser une sortie, réponse à un parent mécontent."
+    emoji: "🔢",
+    name: "Le Prof de Math",
+    accent: "linear-gradient(135deg, #fbbf24, #f59e0b)",
+    accentBg: "rgba(251,191,36,0.1)",
+    objective: "Comprendre l'intérêt du modèle « Thinking / Raisonnement ».",
+    tools: ["Modèle Reasoning"],
+    config: {
+      nom: "Euler-Junior",
+      instructions: "Tu es un tuteur en mathématiques. Ne donne jamais la réponse directement. Guide l'élève étape par étape en posant des questions.",
+      outil: "⚠️ Choisir le modèle « Gemini Advanced (Reasoning) » si disponible"
+    },
+    prompt: "Je ne comprends pas comment résoudre 2x + 5 = 15.",
+    observation: "Le Gem ne doit PAS donner la réponse directement mais guider par des questions successives."
   },
   {
     id: 6,
-    icon: "🧩",
-    title: "L'Exercice à Trous",
-    desc: "Générez des textes à trous pédagogiques avec corrigé intégré pour n'importe quelle matière.",
-    tags: ["Facile", "Exercices"],
-    tagClasses: ["easy", ""],
-    time: "3 min",
-    accentBg: "rgba(139,92,246,0.1)",
-    accentBorder: "rgba(139,92,246,0.2)",
-    accent: "#8b5cf6",
-    objective: "Découvrir la génération automatique d'exercices classiques mais efficaces.",
-    prompt: `Crée un exercice à trous sur le thème de la conjugaison du passé composé en français.\n\nConsignes :\n- 8 phrases avec un verbe manquant à conjuguer\n- Varier les verbes du 1er, 2e et 3e groupe\n- Inclure des verbes avec l'auxiliaire être ET avoir\n- Les phrases doivent être dans un contexte du quotidien d'un adolescent\n\nDonne ensuite le corrigé complet.`,
-    tip: "Demandez des exercices contextualisés ! « Des phrases sur le thème du sport » ou « en lien avec l'actualité ». Les élèves s'investissent davantage quand le contenu leur parle.",
-    expected: "8 phrases à trous thématiques avec un corrigé séparé. Prêt à être distribué tel quel ou adapté.",
-    variation: "Adaptez à votre matière : exercice à trous en sciences (vocabulaire), en histoire (dates/événements), en langues (grammaire)."
+    emoji: "♿",
+    name: "L'Adaptateur Inclusif",
+    accent: "linear-gradient(135deg, #a78bfa, #7c3aed)",
+    accentBg: "rgba(167,139,250,0.1)",
+    objective: "Gagner du temps sur la différenciation (DYS, TDAH).",
+    tools: ["Canevas", "Style"],
+    config: {
+      nom: "DYS-Friendly",
+      instructions: "Tu adaptes les textes pour des élèves dyslexiques : utilise une police sans serif, aère les paragraphes, mets les mots-clés en gras, et utilise des phrases courtes. Ouvre le résultat dans Canevas.",
+      outil: "✅ Canevas"
+    },
+    prompt: "Adapte ce texte sur la Révolution Industrielle : « La Révolution industrielle a profondément transformé les sociétés européennes au XIXe siècle. Les innovations technologiques comme la machine à vapeur ont permis le développement massif de l'industrie textile et métallurgique. »",
+    observation: null
   },
   {
     id: 7,
-    icon: "🎪",
-    title: "Le Brise-Glace",
-    desc: "Créez des activités brise-glace originales pour démarrer un cours ou accueillir une nouvelle classe.",
-    tags: ["Facile", "Animation"],
-    tagClasses: ["easy", ""],
-    time: "2 min",
-    accentBg: "rgba(236,72,153,0.1)",
-    accentBorder: "rgba(236,72,153,0.2)",
-    accent: "#ec4899",
-    objective: "Voir que l'IA est aussi un allié pour la gestion de classe et l'ambiance.",
-    prompt: `Propose 3 activités brise-glace originales pour une classe de 20 élèves de 5e secondaire.\n\nContraintes :\n- Durée : maximum 10 minutes chacune\n- Pas de matériel spécifique nécessaire\n- Adaptées à des adolescents (pas trop enfantin)\n- Au moins une qui fait bouger les élèves\n\nPour chaque activité, donne :\n- Un nom fun\n- Les règles en 4 étapes maximum\n- Pourquoi ça fonctionne (bénéfice pédagogique)`,
-    tip: "Précisez le contexte : « pour une rentrée de septembre », « pour après un examen », « pour un cours du vendredi après-midi ». L'IA adaptera le ton et l'énergie.",
-    expected: "3 activités complètes et réalistes, avec des idées fraîches que vous pourrez tester dès votre prochain cours.",
-    variation: "Demandez : « Propose un brise-glace qui intègre [votre matière] de façon ludique »."
+    emoji: "🎭",
+    name: "Le Personnage Historique",
+    accent: "linear-gradient(135deg, #f97316, #ea580c)",
+    accentBg: "rgba(249,115,22,0.1)",
+    objective: "Créer de l'interaction et de l'immersion pour les élèves.",
+    tools: ["Roleplay (texte pur)"],
+    config: {
+      nom: "Napoléon",
+      instructions: "Tu es Napoléon Bonaparte. Tu parles à la première personne. Tu es arrogant mais stratégique. Tu ne connais pas les événements après 1821.",
+      outil: "Aucun spécifique (Texte pur)"
+    },
+    prompt: "Pourquoi as-tu vendu la Louisiane aux Américains ?",
+    observation: "Napoléon doit répondre à la première personne, avec son caractère, et ne pas mentionner d'événements post-1821."
   },
   {
     id: 8,
-    icon: "🔄",
-    title: "Le Reformulateur",
-    desc: "Transformez un texte complexe en version simplifiée ou adaptez le registre de langue à votre public.",
-    tags: ["Facile", "Langue"],
-    tagClasses: ["easy", ""],
-    time: "3 min",
-    accentBg: "rgba(20,184,166,0.1)",
-    accentBorder: "rgba(20,184,166,0.2)",
-    accent: "#14b8a6",
-    objective: "Comprendre la capacité de l'IA à adapter le niveau de langue d'un contenu existant.",
-    prompt: `Voici un texte de niveau universitaire. Reformule-le pour qu'il soit compréhensible par un élève de 3e secondaire, en gardant toutes les informations importantes :\n\n"La photosynthèse est un processus biochimique qui permet aux organismes autotrophes de synthétiser de la matière organique à partir de matière minérale, en utilisant l'énergie lumineuse. Ce mécanisme se déroule principalement dans les chloroplastes, grâce à la chlorophylle qui absorbe les photons."\n\nDans ta reformulation :\n- Utilise un vocabulaire accessible\n- Ajoute une comparaison ou métaphore pour aider à comprendre\n- Garde un ton engageant`,
-    tip: "Cela fonctionne dans les deux sens ! Vous pouvez aussi demander de complexifier un texte simple, ou de le traduire dans un registre différent (formel, humoristique, poétique...).",
-    expected: "Le même contenu, rendu accessible, avec des comparaisons parlantes. Idéal pour créer des supports adaptés aux élèves en difficulté.",
-    variation: "Collez un extrait de votre propre cours et demandez : « Simplifie ce passage pour des élèves en difficulté, en gardant les termes-clés en gras »."
+    emoji: "🇬🇧",
+    name: "Le Coach de Langues",
+    accent: "linear-gradient(135deg, #2dd4bf, #14b8a6)",
+    accentBg: "rgba(45,212,191,0.1)",
+    objective: "Pratiquer une langue étrangère avec correction immédiate.",
+    tools: ["Audio / Texte"],
+    config: {
+      nom: "Tutor-English",
+      instructions: "Tu es un professeur d'anglais natif. Tu converses avec moi. Après chaque réponse de ma part, tu corriges mes erreurs de grammaire entre parenthèses avant de continuer la conversation.",
+      outil: "Texte (Audio si disponible)"
+    },
+    prompt: "Hello! I want go to the cinema tomorrow.",
+    observation: "Le Gem doit repérer la faute (« I want TO go ») et la corriger entre parenthèses avant de poursuivre naturellement."
   },
   {
     id: 9,
-    icon: "📋",
-    title: "Le Planificateur",
-    desc: "Générez une séquence de cours structurée avec objectifs, activités et timing pour toute une semaine.",
-    tags: ["Moyen", "Organisation"],
-    tagClasses: ["medium", ""],
-    time: "4 min",
-    accentBg: "rgba(251,146,60,0.1)",
-    accentBorder: "rgba(251,146,60,0.2)",
-    accent: "#fb923c",
-    objective: "Découvrir l'IA comme outil de planification et d'organisation pédagogique.",
-    prompt: `Tu es un enseignant expert en pédagogie active. Planifie une séquence de 3 cours de 50 minutes sur le thème "Les fractions" pour des élèves de 3e secondaire.\n\nPour chaque cours, détaille :\n- L'objectif d'apprentissage (commence par "L'élève sera capable de...")\n- Le déroulement en phases (accroche, apprentissage, pratique, clôture)\n- Le timing de chaque phase\n- Un exercice concret à réaliser\n- Le matériel nécessaire`,
-    tip: "L'IA produit un excellent premier jet de planification. C'est un point de départ à adapter à votre réalité de terrain : rythme de la classe, matériel disponible, prérequis des élèves.",
-    expected: "3 fiches de préparation détaillées avec un fil conducteur cohérent entre les séances. Une base solide qui vous fait gagner un temps précieux.",
-    variation: "Adaptez : « Planifie une séquence de [X] cours sur [sujet] en [matière] pour des élèves de [niveau] ». Ajoutez vos contraintes spécifiques."
+    emoji: "📧",
+    name: "Le Diplomate",
+    accent: "linear-gradient(135deg, #818cf8, #6366f1)",
+    accentBg: "rgba(129,140,248,0.1)",
+    objective: "Gérer les communications délicates avec les parents ou la direction.",
+    tools: ["Canevas"],
+    config: {
+      nom: "Secrétaire Diplomatique",
+      instructions: "Tu aides à rédiger des emails professionnels. Le ton doit être empathique, poli, mais ferme sur le règlement scolaire. Ne sois jamais agressif.",
+      outil: "✅ Canevas"
+    },
+    prompt: "Rédige un mail aux parents de Léo pour signaler 3 retards cette semaine et demander une réunion.",
+    observation: null
   },
   {
     id: 10,
-    icon: "🏆",
-    title: "Le Coach Feedback",
-    desc: "Rédigez des commentaires constructifs et personnalisés pour les bulletins ou les copies d'élèves.",
-    tags: ["Moyen", "Feedback"],
-    tagClasses: ["medium", ""],
-    time: "3 min",
-    accentBg: "rgba(234,179,8,0.1)",
-    accentBorder: "rgba(234,179,8,0.2)",
-    accent: "#eab308",
-    objective: "Voir comment l'IA peut aider à formuler du feedback bienveillant et constructif.",
-    prompt: `Rédige 3 commentaires de bulletin pour des profils d'élèves différents en mathématiques (4e secondaire) :\n\n1. Élève brillant mais qui ne participe pas en classe et ne fait pas ses devoirs\n\n2. Élève qui travaille énormément mais a des résultats moyens (12/20)\n\n3. Élève en grande difficulté mais qui montre de la bonne volonté\n\nChaque commentaire doit :\n- Faire 3-4 phrases\n- Commencer par un point positif\n- Identifier un axe d'amélioration concret\n- Terminer par un encouragement personnalisé`,
-    tip: "Lors de la rédaction des bulletins, l'IA peut vous aider à varier vos formulations et à trouver le mot juste pour chaque situation. Fini les commentaires qui se répètent !",
-    expected: "3 commentaires distincts, bienveillants et constructifs, chacun adapté au profil décrit. Personnalisez avec le prénom et les détails spécifiques.",
-    variation: "Essayez : « Rédige un commentaire pour un élève qui [situation spécifique] en [matière] » pour un cas réel de votre classe."
+    emoji: "🧩",
+    name: "Le Générateur de QCM",
+    accent: "linear-gradient(135deg, #f472b6, #ec4899)",
+    accentBg: "rgba(244,114,182,0.1)",
+    objective: "Exporter du contenu vers d'autres outils (Moodle, Wooclap).",
+    tools: ["Formatage CSV"],
+    config: {
+      nom: "Moodle-Maker",
+      instructions: "Tu génères des questions à choix multiples. Tu dois impérativement formater la sortie en code CSV pour une importation facile. Colonnes : Question, Bonne réponse, Mauvaise réponse 1, Mauvaise réponse 2.",
+      outil: "Texte formaté (CSV)"
+    },
+    prompt: "Fais-moi 5 questions sur les capitales de l'Union Européenne.",
+    observation: "Le Gem doit respecter le format CSV technique demandé, pas un texte libre."
   },
   {
     id: 11,
-    icon: "🎲",
-    title: "Le Gamificateur",
-    desc: "Transformez n'importe quel contenu de cours en jeu ou activité ludique pour captiver vos élèves.",
-    tags: ["Moyen", "Ludique"],
-    tagClasses: ["medium", ""],
-    time: "4 min",
-    accentBg: "rgba(168,85,247,0.1)",
-    accentBorder: "rgba(168,85,247,0.2)",
-    accent: "#a855f7",
-    objective: "Explorer le potentiel de l'IA pour créer des activités gamifiées à partir de contenu académique.",
-    prompt: `Transforme la révision des temps verbaux en français (présent, imparfait, passé composé, futur simple) en un jeu de plateau pour 4 équipes de 5 élèves.\n\nLe jeu doit contenir :\n- Un nom accrocheur\n- Les règles du jeu (simples et claires)\n- 10 cartes "défi" avec des questions variées\n- 5 cartes "bonus" avec des défis amusants\n- Un système de points\n- Durée : 30 minutes maximum\n\nLe jeu doit être réalisable avec du papier et des crayons uniquement.`,
-    tip: "La gamification est un levier puissant de motivation. L'IA peut imaginer des mécaniques de jeu que vous n'auriez pas envisagées. Testez avec vos propres sujets !",
-    expected: "Un jeu complet avec règles, cartes et système de points, réalisable sans matériel coûteux. Prêt à être testé en classe !",
-    variation: "Essayez d'autres formats : « Crée un escape game sur [sujet] », « Invente un jeu de rôle pédagogique sur [thème] »."
+    emoji: "🏟️",
+    name: "L'Architecte de Parcours",
+    accent: "linear-gradient(135deg, #4ade80, #22c55e)",
+    accentBg: "rgba(74,222,128,0.1)",
+    objective: "Visualiser rapidement l'installation du matériel dans le gymnase pour gagner du temps.",
+    tools: ["Générer des images"],
+    config: {
+      nom: "Gym-Planner",
+      instructions: "Tu es un expert en logistique sportive. Tu génères des schémas d'installation de matériel sportif. Vue de dessus (Top-down view), style épuré et schématique sur fond blanc. Matérialise les zones de sécurité en rouge.",
+      outil: "✅ Générer des images"
+    },
+    prompt: "Génère un schéma pour un circuit training avec 4 ateliers : saut de haies, tapis de sol, banc suédois et espaliers.",
+    observation: "Le prof peut projeter l'image sur une tablette ou l'imprimer pour que les élèves installent eux-mêmes le matériel."
   },
   {
     id: 12,
-    icon: "🔮",
-    title: "Le Gem sur Mesure",
-    desc: "Mission finale : créez votre propre Gem Gemini personnalisé, un assistant IA taillé pour votre matière.",
-    tags: ["Avancé", "Gem"],
-    tagClasses: ["medium", ""],
-    time: "5 min",
-    accentBg: "rgba(99,102,241,0.1)",
-    accentBorder: "rgba(99,102,241,0.2)",
-    accent: "#6366f1",
-    objective: "Apprendre à créer un Gem Gemini personnalisé pour automatiser vos tâches récurrentes.",
-    prompt: `Aide-moi à créer les instructions pour un Gem Gemini personnalisé destiné à un professeur de [VOTRE MATIÈRE] en secondaire.\n\nCe Gem doit :\n- Avoir un nom accrocheur\n- Avoir des instructions claires qui définissent son rôle\n- Toujours répondre en français\n- Adapter son niveau au secondaire belge\n- Proposer des réponses structurées\n\nGénère les instructions complètes que je pourrai copier-coller dans la configuration du Gem.\n\nVoici ce que je veux que ce Gem fasse principalement :\n- Créer des exercices pour mes cours\n- Proposer des idées d'activités\n- M'aider à rédiger des consignes claires`,
-    tip: "Un Gem, c'est comme un assistant personnalisé qui se souvient de vos préférences. Remplacez [VOTRE MATIÈRE] par votre discipline et adaptez les 3 tâches principales à vos besoins réels.",
-    expected: "Des instructions détaillées pour configurer votre Gem, incluant le rôle, le ton, les compétences et les limites. Il suffit de copier-coller dans Gemini > Gems > Créer un Gem.",
-    variation: "Créez des Gems spécialisés : « Un Gem qui corrige les copies », « Un Gem qui génère des exercices de [matière] », « Un Gem assistant de direction »."
+    emoji: "🤕",
+    name: "Le Coach Inclusif",
+    accent: "linear-gradient(135deg, #fb923c, #f97316)",
+    accentBg: "rgba(251,146,60,0.1)",
+    objective: "Trouver instantanément des activités adaptées pour un élève blessé ou en situation de handicap.",
+    tools: ["Canevas"],
+    config: {
+      nom: "EPS-Adapté",
+      instructions: "Tu es un spécialiste de la physiologie et du sport adapté. Je te donne le sport du jour et la blessure de l'élève. Tu me proposes 3 exercices alternatifs sécurisés qu'il peut faire pendant que les autres pratiquent, ou un rôle d'arbitrage actif avec une fiche d'observation précise. Ouvre le résultat dans Canevas.",
+      outil: "✅ Canevas"
+    },
+    prompt: "Nous faisons du Volley-ball. J'ai une élève qui a une attelle au poignet gauche (droitière). Que peut-elle faire ?",
+    observation: "Le Gem doit proposer des activités réalistes et sécurisées, pas juste « reste sur le banc »."
   }
 ];
 
-// ═══ STATE ═══
-let completed = JSON.parse(localStorage.getItem('ailab_completed') || '[]');
+// ═══════════════ STATE ═══════════════
+let completed = JSON.parse(localStorage.getItem('gems-completed') || '[]');
+let currentGemIndex = null;
 
-// ═══ RENDER ═══
-function renderMissions() {
-  const grid = document.getElementById('missionsGrid');
-  grid.innerHTML = missions.map((m, i) => `
-    <div class="mission-card fade-in ${completed.includes(m.id)?'completed':''}" 
-         style="--card-accent:${m.accent};--card-accent-bg:${m.accentBg};--card-accent-border:${m.accentBorder};animation-delay:${i*0.05}s"
-         onclick="openMission(${m.id})">
-      <div class="card-top">
-        <div class="mission-icon" style="background:${m.accentBg};border-color:${m.accentBorder}">
-          ${m.icon}
-        </div>
-        <div class="mission-check">
-          ${completed.includes(m.id) ? '✓' : ''}
+// ═══════════════ RENDER GRID ═══════════════
+function renderGrid() {
+  const grid = document.getElementById('gemGrid');
+  grid.innerHTML = gems.map((gem, i) => `
+    <div class="gem-card ${completed.includes(gem.id) ? 'completed' : ''}"
+         style="--card-accent: ${gem.accent}; --card-accent-bg: ${gem.accentBg}; animation-delay: ${i * 0.06}s"
+         onclick="openGem(${i})"
+         data-id="${gem.id}">
+      <div class="card-header">
+        <div class="card-icon">${gem.emoji}</div>
+        <div class="card-titles">
+          <div class="card-number">GEM ${String(gem.id).padStart(2, '0')}</div>
+          <div class="card-name">${gem.name}</div>
         </div>
       </div>
       <div class="card-body">
-        <div class="mission-number">Mission ${String(m.id).padStart(2,'0')}</div>
-        <div class="mission-title">${m.title}</div>
-        <p class="mission-desc">${m.desc}</p>
-        <div class="mission-tags">
-          ${m.tags.map((t,j) => `<span class="tag ${m.tagClasses[j]}">${t}</span>`).join('')}
+        <div class="card-objective">${gem.objective}</div>
+        <div class="card-tags">
+          ${gem.tools.map(t => `<span class="card-tag tool">${t}</span>`).join('')}
         </div>
-      </div>
-      <div class="card-footer">
-        <span class="time-estimate">⏱ ${m.time}</span>
-        <button class="start-btn">${completed.includes(m.id)?'Revoir':'Démarrer'} →</button>
       </div>
     </div>
   `).join('');
-  
-  // trigger fade-in
-  setTimeout(() => {
-    document.querySelectorAll('.missions-grid .fade-in').forEach(el => el.classList.add('visible'));
-  }, 100);
+  updateProgress();
 }
 
-function renderProgress() {
-  const count = completed.length;
-  const pct = (count / missions.length) * 100;
-  
-  document.getElementById('progressNum').textContent = count;
-  document.getElementById('completedCount').textContent = count;
-  document.getElementById('progressBar').style.width = pct + '%';
-  
-  const badges = document.getElementById('progressBadges');
-  badges.innerHTML = missions.map(m => 
-    `<div class="badge ${completed.includes(m.id)?'completed':''}" title="Mission ${m.id}: ${m.title}">${m.icon}</div>`
-  ).join('');
-}
+// ═══════════════ MODAL ═══════════════
+function openGem(index) {
+  currentGemIndex = index;
+  const gem = gems[index];
+  const overlay = document.getElementById('modalOverlay');
+  const content = document.getElementById('modalContent');
+  const accent = document.getElementById('modalAccent');
+  const isCompleted = completed.includes(gem.id);
 
-// ═══ MODAL ═══
-function openMission(id) {
-  const m = missions.find(x => x.id === id);
-  const modal = document.getElementById('modal');
-  const isCompleted = completed.includes(id);
-  
-  modal.innerHTML = `
+  accent.style.background = gem.accent;
+  document.getElementById('modal').style.setProperty('--card-accent', gem.accent);
+  document.getElementById('modal').style.setProperty('--card-accent-bg', gem.accentBg);
+
+  content.innerHTML = `
     <div class="modal-header">
-      <div class="modal-header-left">
-        <div class="modal-icon" style="background:${m.accentBg};border:1px solid ${m.accentBorder};border-radius:var(--radius-sm)">
-          ${m.icon}
-        </div>
-        <div>
-          <div class="modal-label">Mission ${String(m.id).padStart(2,'0')}</div>
-          <div class="modal-title">${m.title}</div>
-        </div>
-      </div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="modal-content">
-      <div class="modal-section">
-        <div class="modal-section-title">🎯 Objectif</div>
-        <p class="modal-text">${m.objective}</p>
-      </div>
-
-      <div class="modal-section">
-        <div class="modal-section-title">📤 Prompt à copier dans Gemini</div>
-        <div class="prompt-box">
-          <button class="copy-btn" onclick="copyPrompt(this, ${m.id})">📋 Copier</button>
-          ${escapeHtml(m.prompt)}
-        </div>
-      </div>
-
-      <div class="modal-section">
-        <div class="tip-box">
-          <strong>💡 Astuce :</strong> ${m.tip}
-        </div>
-      </div>
-
-      <div class="modal-section">
-        <div class="expected-box">
-          <strong>👁️ Ce que vous devriez obtenir :</strong> ${m.expected}
-        </div>
-      </div>
-
-      <div class="modal-section">
-        <div class="variation-box">
-          <strong>🔀 Variante à tester :</strong> ${m.variation}
-        </div>
-      </div>
-
-      <div class="modal-actions">
-        <a href="https://gemini.google.com" target="_blank" class="btn-gemini">
-          ✦ Ouvrir Gemini
-        </a>
-        <button class="btn-complete" onclick="toggleComplete(${m.id})" ${isCompleted ? '' : ''}>
-          ${isCompleted ? '✓ Complétée !' : '✓ Marquer comme terminée'}
-        </button>
+      <div class="modal-icon" style="background: ${gem.accentBg}">${gem.emoji}</div>
+      <div>
+        <div class="modal-number">GEM ${String(gem.id).padStart(2, '0')} / 12</div>
+        <div class="modal-title">${gem.name}</div>
       </div>
     </div>
+    <p class="modal-objective">🎯 <strong>Objectif :</strong> ${gem.objective}</p>
+
+    <div class="block">
+      <div class="block-label config">⚙️ Configuration (L'Architecte)</div>
+      <div class="block-body">
+        <div class="field">
+          <div class="field-key">Nom du Gem</div>
+          <div class="field-value mono">${gem.config.nom}</div>
+        </div>
+        <div class="field">
+          <div class="field-key">Instructions</div>
+          <div class="field-value">${gem.config.instructions}</div>
+        </div>
+        <div class="field">
+          <div class="field-key">Outil activé</div>
+          <div class="field-value"><span class="tool-badge">${gem.config.outil}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label action">▶️ Action (L'Utilisateur)</div>
+      <div class="block-body">
+        <div class="field">
+          <div class="field-key">Prompt à tester</div>
+          <div class="prompt-box">
+            <div class="prompt-text">${gem.prompt}</div>
+            <button class="copy-btn" onclick="copyPrompt(this, ${index})" title="Copier le prompt">📋</button>
+          </div>
+        </div>
+        ${gem.observation ? `
+        <div class="observation">
+          <strong>👁 Observation :</strong> ${gem.observation}
+        </div>` : ''}
+      </div>
+    </div>
+
+    <button class="complete-btn ${isCompleted ? 'is-completed' : ''}" onclick="toggleComplete(${gem.id})">
+      ${isCompleted ? '✓ Terminé — Bravo !' : '☐ Marquer comme terminé'}
+    </button>
   `;
-  
-  document.getElementById('modalOverlay').classList.add('active');
+
+  // Nav buttons
+  document.getElementById('prevBtn').disabled = index === 0;
+  document.getElementById('nextBtn').disabled = index === gems.length - 1;
+
+  overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
 
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('active');
   document.body.style.overflow = '';
+  currentGemIndex = null;
 }
 
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
-
-function copyPrompt(btn, id) {
-  const m = missions.find(x => x.id === id);
-  navigator.clipboard.writeText(m.prompt).then(() => {
-    btn.textContent = '✓ Copié !';
-    btn.classList.add('copied');
-    setTimeout(() => {
-      btn.textContent = '📋 Copier';
-      btn.classList.remove('copied');
-    }, 2000);
-  });
-}
-
-function toggleComplete(id) {
-  if (!completed.includes(id)) {
-    completed.push(id);
-    localStorage.setItem('ailab_completed', JSON.stringify(completed));
-    renderProgress();
-    renderMissions();
-    
-    // update modal button
-    const btn = event.target;
-    btn.textContent = '✓ Complétée !';
-    
-    // Check all done
-    if (completed.length === missions.length) {
-      setTimeout(() => {
-        closeModal();
-        showCelebration();
-      }, 500);
-    }
+function navigateGem(dir) {
+  const newIndex = currentGemIndex + dir;
+  if (newIndex >= 0 && newIndex < gems.length) {
+    openGem(newIndex);
+    document.getElementById('modal').scrollTop = 0;
   }
 }
 
-// ═══ CELEBRATION ═══
-function showCelebration() {
-  document.getElementById('celebrationOverlay').classList.add('active');
-  launchConfetti();
-}
-
-function closeCelebration() {
-  document.getElementById('celebrationOverlay').classList.remove('active');
-}
-
-function launchConfetti() {
-  const colors = ['#6366f1','#8b5cf6','#f59e0b','#10b981','#f43f5e','#06b6d4','#ec4899'];
-  for (let i = 0; i < 80; i++) {
-    const piece = document.createElement('div');
-    piece.className = 'confetti-piece';
-    piece.style.left = Math.random() * 100 + 'vw';
-    piece.style.top = '-10px';
-    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-    piece.style.width = (Math.random() * 8 + 4) + 'px';
-    piece.style.height = (Math.random() * 8 + 4) + 'px';
-    document.body.appendChild(piece);
-    
-    const duration = Math.random() * 2000 + 1500;
-    const xDrift = (Math.random() - 0.5) * 200;
-    
-    piece.animate([
-      { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
-      { transform: `translate(${xDrift}px, 100vh) rotate(${Math.random()*720}deg)`, opacity: 0 }
-    ], { duration, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' }).onfinish = () => piece.remove();
-  }
-}
-
-// ═══ PARTICLES ═══
-function createParticles() {
-  for (let i = 0; i < 30; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    p.style.left = Math.random() * 100 + '%';
-    p.style.top = Math.random() * 100 + '%';
-    p.style.animationDelay = Math.random() * 5 + 's';
-    document.body.appendChild(p);
-    
-    // Gentle float animation
-    const dur = 10000 + Math.random() * 20000;
-    p.animate([
-      { transform: 'translate(0,0)', opacity: 0.1 },
-      { transform: `translate(${(Math.random()-0.5)*100}px, ${(Math.random()-0.5)*100}px)`, opacity: 0.25 },
-      { transform: 'translate(0,0)', opacity: 0.1 }
-    ], { duration: dur, iterations: Infinity, easing: 'ease-in-out' });
-  }
-}
-
-// ═══ SCROLL OBSERVER ═══
-function initScrollObserver() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.1 });
-  
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-}
-
-// ═══ CLOSE MODAL ON OVERLAY CLICK ═══
+// Close on overlay click
 document.getElementById('modalOverlay').addEventListener('click', (e) => {
   if (e.target === e.currentTarget) closeModal();
 });
 
-// ═══ CLOSE ON ESCAPE ═══
+// Close on Escape
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeModal();
+  if (e.key === 'ArrowLeft' && currentGemIndex !== null) navigateGem(-1);
+  if (e.key === 'ArrowRight' && currentGemIndex !== null) navigateGem(1);
 });
 
-// ═══ INIT ═══
-renderMissions();
-renderProgress();
-createParticles();
-setTimeout(initScrollObserver, 100);
+// ═══════════════ COPY ═══════════════
+function copyPrompt(btn, index) {
+  const text = gems[index].prompt;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.textContent = '✓';
+    showToast('Prompt copié dans le presse-papier !');
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.textContent = '📋';
+    }, 2000);
+  });
+}
+
+// ═══════════════ COMPLETE ═══════════════
+function toggleComplete(id) {
+  if (completed.includes(id)) {
+    completed = completed.filter(c => c !== id);
+  } else {
+    completed.push(id);
+  }
+  localStorage.setItem('gems-completed', JSON.stringify(completed));
+  renderGrid();
+
+  // Re-render modal button
+  if (currentGemIndex !== null) {
+    const gem = gems[currentGemIndex];
+    const btn = document.querySelector('.complete-btn');
+    const isCompleted = completed.includes(gem.id);
+    btn.className = `complete-btn ${isCompleted ? 'is-completed' : ''}`;
+    btn.innerHTML = isCompleted ? '✓ Terminé — Bravo !' : '☐ Marquer comme terminé';
+  }
+
+  if (completed.length === 12) {
+    showToast('🎉 Félicitations ! Vous avez terminé les 12 Gems !');
+  }
+}
+
+// ═══════════════ PROGRESS ═══════════════
+function updateProgress() {
+  const count = completed.length;
+  document.getElementById('progressCount').textContent = `${count} / 12`;
+  document.getElementById('progressFill').style.width = `${(count / 12) * 100}%`;
+}
+
+// ═══════════════ TOAST ═══════════════
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ═══════════════ INIT ═══════════════
+renderGrid();
 </script>
 </body>
 </html>
